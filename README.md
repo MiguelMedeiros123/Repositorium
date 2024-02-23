@@ -1,1 +1,1 @@
-# Repositorium
+# Repositório para estudos.
