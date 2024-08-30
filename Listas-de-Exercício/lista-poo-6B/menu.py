@@ -5,182 +5,36 @@
 # D - Delete - remove um cliente do cadastro
 import json
 import datetime as dt
+from servico import Servico, Servicos
+from cliente import Cliente, Clientes
+from horario import Horario, Horarios
 
-# Modelo
-class Cliente:
-  def __init__(self, id, nome, email, fone):
-    self.id = id
-    self.nome = nome
-    self.email = email
-    self.fone = fone
-  def __str__(self):
-    return f"{self.id} - {self.nome} - {self.email} - {self.fone}"
-
-class Horario:
-  def __init__(self, id, d):
-    self.id = id
-    self.data = d
-    self.confirmado = False
-    self.idCliente = 0
-    self.idServico = 0
-  def __str__(self):
-    return f"{self.id} - {self.data} - {self.confirmado} - {self.idCliente} - {self.idServico}"
-
-class Servico:
-  def __init__(self, id, d, v, t):
-    self.id = id
-    self.descricao = d
-    self.valor = v
-    self.duracao = t
-  def __str__(self):
-    return f"{self.id} - {self.descricao} - {self.valor} - {self.duracao}"
-    
-
-# Persistência
-class Clientes:
-  objetos = []  # atributo estático
-  @classmethod
-  def inserir(cls, obj):
-    cls.abrir()
-    m = 0                     # cálculo do maior id utilizado - começa com 0
-    for c in cls.objetos:     # percorre a lista de clientes - c é cada cliente
-      if c.id > m: m = c.id   # compara o id de c com m (maior)
-    obj.id = m + 1  
-    cls.objetos.append(obj)
-    cls.salvar()
-  @classmethod
-  def listar(cls):
-    cls.abrir()
-    return cls.objetos
-  @classmethod
-  def listar_id(cls, id):
-    cls.abrir()
-    for c in cls.objetos:
-      if c.id == id: return c
-    return None 
-  @classmethod
-  def atualizar(cls, obj):
-    c = cls.listar_id(obj.id)
-    if c != None:
-       c.nome = obj.nome
-       c.email = obj.email
-       c.fone = obj.fone
-    cls.salvar()   
-  @classmethod
-  def excluir(cls, obj):
-    c = cls.listar_id(obj.id)
-    if c != None: 
-      cls.objetos.remove(c)
-      cls.salvar()   
-  @classmethod
-  def salvar(cls):  
-    with open("clientes.json", mode = "w") as arquivo:   # write
-      json.dump(cls.objetos, arquivo, default = vars) 
-  @classmethod
-  def abrir(cls):
-    cls.objetos = []
-    try: 
-      with open("clientes.json", mode = "r") as arquivo:   # read
-        texto = json.load(arquivo)
-        for obj in texto:
-          c = Cliente(obj["id"], obj["nome"], obj["email"], obj["fone"])                     # dicionário
-          cls.objetos.append(c)
-    except FileNotFoundError:
-      pass
-
-class Horarios:
-  objetos = []
-  @classmethod
-  def inserir(cls, obj):
-    cls.abrir()
-    m = 0
-    for n in cls.objetos:
-      if n.id > m: m = n.id
-    obj.id = m + 1
-    cls.objetos.append(obj)
-    cls.salvar()
-  @classmethod
-  def listar(cls):
-    cls.abrir()
-    return cls.objetos
-  @classmethod
-  def listar_id(cls, id):
-    cls.abrir()
-    for n in cls.objetos:
-      if id == n.id: return n
-    return None
-  @classmethod
-  def atualizar(cls, obj):
-    n = cls.listar_id(obj.id)
-    if n != None:
-      n.data = obj.data
-      n.confirmado = obj.confirmado
-      n.idCliente = obj.idCliente
-      n.idServico = obj.idServico
-    cls.salvar()
-  @classmethod
-  def excluir(cls, obj):
-    n = cls.listar_id(obj.id)
-    if n != None:
-      cls.objetos.remove(n)
-      cls.salvar()
-  @classmethod
-  def abrir(cls):
-    cls.objetos = []
-    try:
-      with open("horarios.json", mode = "r") as arquivo:
-        texto = json.load(arquivo)
-        for obj in texto:
-          n = Horario(obj["id"], obj["data"])
-          cls.objetos.append(n)
-    except FileNotFoundError:
-      pass
-  @classmethod
-  def salvar(cls):
-    with open("horarios.json", mode = "w") as arquivo:
-      json.dump(cls.objetos, arquivo, default = vars)
-
-class Servicos:
-  objetos = []
-  @classmethod
-  def inserir(cls, obj):
-    cls.abrir()
-    m = 0
-    for n in cls.objetos:
-      if n.id > m: m = n.id
-    obj.id = m + 1
-    cls.objetos.append(obj)
-    cls.salvar()
-  @classmethod
-  def listar(cls):
-    cls.abrir()
-    return cls.objetos
-  @classmethod
-  def listar_id(cls, id):
-    cls.abrir()
-    for n in cls.objetos:
-      if n.id == id: return n
-    return None
-  @classmethod
-  def atualizar(cls, obj):
-    n = cls.listar_id(obj.id)
-
-# Visão
 class UI:
   @staticmethod
   def menu():
-    print("1 - Inserir cliente, 2 - listar clientes, 3 - atualizar cliente, 4 - excluir cliente, 9 - fim")
+    print("1 - inserir cliente, 2 - listar clientes, 3 - atualizar cliente, 4 - excluir cliente")
+    print("5 - inserir horário, 6 - listar horários, 7 - atualizar horário, 8 - excluir horário")
+    print("9 - inserir serviço, 10 - listar serviços, 11 - atualizar serviço, 12 - excluir serviço")
+    print("13 - fim")
     return int(input("Informe uma opção: "))
 
   @staticmethod
   def main():
     op = 0
-    while op != 9: 
+    while op != 13: 
       op = UI.menu()
       if op == 1: UI.cliente_inserir()
       if op == 2: UI.cliente_listar()
       if op == 3: UI.cliente_atualizar()
       if op == 4: UI.cliente_excluir()
+      if op == 5: UI.horario_inserir()
+      if op == 6: UI.horario_listar()
+      if op == 7: UI.horario_atualizar()
+      if op == 8: UI.horario_excluir()
+      if op == 9: UI.servico_inserir()
+      if op == 10: UI.servico_listar()
+      if op == 11: UI.servico_atualizar()
+      if op == 12: UI.servico_excluir()
 
   @staticmethod
   def cliente_inserir():
@@ -213,4 +67,53 @@ class UI:
     c = Cliente(id, "", "", "")
     Clientes.excluir(c)
 
+  @staticmethod
+  def horario_inserir():
+    dstr = dt.input("Insere uma data, no formato (dd/mm/aaaa hh:mm): ")
+    d = dt.datetime.strptime(dstr, "%d/%M/%Y %h:%m")
+    h = Horario(0, d)
+    Horarios.inserir(h)
+  
+  @staticmethod
+  def horario_listar():
+    for n in Horarios.listar():
+      print(n)
+
+  @staticmethod
+  def horario_atualizar():
+    UI.horario_listar()
+    id = int(input("Informe o id do horário a atualizar: "))
+    d = dt.datetime.strptime(input("Insere o novo horário, no formato (dd/mm/aaaa hh:mm): "), "%d/%M/%Y %h:%m")
+    n = Horario(id, d)
+    Horarios.atualizar(n)
+
+  @staticmethod
+  def horario_excluir():
+    UI.horario_listar()
+    id = int(input("Insere o id do horário a ser excluído: "))
+    n = Horario(id, "")
+    Horarios.excluir(n)
+
+  @staticmethod
+  def servico_inserir():
+    d = input("Insere uma descrição ao serviço: ")
+    v = int(input("Insere um valor ao serviço: "))
+    t = int(input("Insere uma duração ao serviço: "))
+    n = Servico(0, d, v, t)
+    Servicos.inserir(n)
+
+  @staticmethod
+  def servico_listar():
+    for n in Horarios.listar():
+      print(n)
+
+  @staticmethod
+  def servico_atualizar():
+    UI.servico_listar()
+    id = int(input("Informe o id do serviço a atualizar: "))
+    d = input("Insere a nova descrição: ")
+    v = int(input("Insere o novo valor: "))
+    t = int(input("Insere a nova duração: "))
+    n = Servico(id, d, v, t)
+    Servicos.atualizar(n)
 UI.main()
