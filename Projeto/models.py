@@ -3,9 +3,10 @@ import datetime as dt
 
 
 class Funcionario:
-    def __init__(self, id: int, nome: str, nasc: dt.datetime, cpf: str, email: str, custo: float, contr: dt.datetime, id_setor: int) -> None:
+    def __init__(self, id: int, nome: str, ocup: str, nasc: dt.datetime, cpf: str, email: str, custo: float, contr: dt.datetime, id_setor: int) -> None:
         self.id = id
         self.nome = nome
+        self.ocup = ocup
         self.nasc = nasc
         self.cpf = cpf
         self.email = email
@@ -14,7 +15,7 @@ class Funcionario:
         self.id_setor = id_setor
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome}; Nascimento - {dt.datetime.strftime(self.nasc, "%d/%M/%Y")}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.datetime.strftime(self.contr, "%d/%M/%Y")}; ID do setor: {self.id_setor}"
+        return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.datetime.strftime(self.nasc, "%d/%M/%Y")}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.datetime.strftime(self.contr, "%d/%M/%Y")}; ID do setor: {self.id_setor}"
     
     def to_json(self):
         dic = {}
@@ -27,8 +28,8 @@ class Funcionarios:
     def inserir(cls, obj: Funcionario):
         cls.abrir()
         m = 0
-        for n in cls.objetos:
-            if n.id > m: m = n.id
+        for f in cls.objetos:
+            if f.id > m: m = f.id
         obj.id = m + 1
         cls.objetos.append(obj)
         cls.salvar()
@@ -39,33 +40,34 @@ class Funcionarios:
         return cls.objetos
 
     @classmethod
-    def listar_id(cls, id: int):
+    def listar_id(cls, id: int) -> Funcionario:
         cls.abrir()
-        for n in cls.objetos:
-            if id == n.id: return n
+        for f in cls.objetos:
+            if id == f.id: return f
         return None
 
     @classmethod
     def atualizar(cls, obj: Funcionario):
         cls.abrir()
-        n = cls.listar_id(obj.id)
-        if n != None:
-            n.id = id
-            n.nome = obj.nome
-            n.nasc = obj.nasc
-            n.cpf = obj.cpf
-            n.email = obj.email
-            n.custo = obj.custo
-            n.contr = obj.contr
-            n.id_setor = obj.id_setor
+        f = cls.listar_id(obj.id)
+        if f != None:
+            f.id = id
+            f.nome = obj.nome
+            f.ocup = obj.ocup
+            f.nasc = obj.nasc
+            f.cpf = obj.cpf
+            f.email = obj.email
+            f.custo = obj.custo
+            f.contr = obj.contr
+            f.id_setor = obj.id_setor
         cls.salvar()
 
     @classmethod
-    def excluir(cls, obj: Funcionario):
+    def excluir(cls, id):
         cls.abrir()
-        n = cls.listar_id(obj.id)
-        if n != None:
-            cls.objetos.remove(n)
+        f = cls.listar_id(id)
+        if f != None:
+            cls.objetos.remove(f)
             cls.salvar()
 
     @classmethod
@@ -96,6 +98,25 @@ class Setor:
         self.custo = 0
     def __str__(self) -> str:
         return f"{self.id} - {self.nome}; {self.desc}; Criado a {self.data}; Funcionários - {len(self.funcionarios)}; Custo mensal - {self.custo}"
-    def inserir_func(self, id_func: int):
-        self.funcionarios.append(id_func)
-        self.custo += Funcionarios.listar_id(id_func).custo
+
+
+class Setores:
+    objetos = []
+
+    @classmethod
+    def listar_id(cls, id: int) -> Setor:
+        cls.abrir()
+        for s in cls.objetos:
+            if s.id == id: return s
+        return None
+
+    @classmethod
+    def inserir_func(cls, id: int, id_func: int):
+        cls.abrir()
+        s = cls.listar_id(id)
+        if s != None:
+            f = Funcionarios.listar_id(id_func)
+            if f != None:
+                s.funcionarios.append(id_func)
+                s.custo += f.custo
+                cls.salvar()
