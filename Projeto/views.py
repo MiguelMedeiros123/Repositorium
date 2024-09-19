@@ -1,4 +1,4 @@
-from models import Funcionario, Funcionarios, Setor, Setores
+from models import Funcionario, Funcionarios, Setor, Setores, Empresa, Empresas
 import datetime as dt
 
 
@@ -47,3 +47,17 @@ def setor_listar_func_id(id_setor: int, id_func: int):
 
 def setor_remover_func(id_setor: int, id_func: int):
     Setores.remover_func(id_setor, id_func)
+
+def empresa_inserir(nome: str, desc: str, dono: str):
+    e = Empresa(0, nome, desc, dono)
+    Empresas.inserir(e)
+
+def empresa_listar():
+    return Empresas.listar()
+
+def empresa_atualizar(id: int, nome: str, desc: str, dono: str):
+    e = Empresa(id, nome, desc, dono)
+    Empresas.atualizar(e)
+
+def empresa_excluir(id: int):
+    Empresas.excluir(id)

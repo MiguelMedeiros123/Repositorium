@@ -213,7 +213,7 @@ class Setores:
     def abrir(cls):
         cls.objetos = []
         try:
-            with open("funcionarios.json", mode = "r") as arquivo:
+            with open("setores.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     n = Setor(obj["id"], obj["nome"], obj["desc"], dt.datetime.strptime(obj["data"], "%d/%m/%Y").date(), obj["funcionarios"], obj["custo"])
@@ -225,3 +225,74 @@ class Setores:
     def salvar(cls):
         with open("setores.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Setor.to_json)
+
+
+class Empresa:
+    def __init__(self, id: int, nome: str, desc: str, dono: str):
+        self.id = id
+        self.nome = nome
+        self.desc = desc
+        self.dono = dono
+    def __str__(self) -> str:
+        return f"{self.id} - {self.nome}; {self.desc}; Dono - {self.dono}"
+
+
+class Empresas:
+    objetos = []
+
+    @classmethod
+    def inserir(cls, obj: Empresa):
+        cls.abrir()
+        m = 0
+        for e in cls.objetos:
+            if e.id > m: m = e.id
+        obj.id = m + 1
+        cls.objetos.append(obj)
+        cls.salvar()
+
+    @classmethod
+    def listar(cls):
+        cls.abrir()
+        return cls.objetos
+
+    @classmethod
+    def listar_id(cls, id: int) -> Empresa:
+        cls.abrir()
+        for e in cls.objetos:
+            if id == e.id: return e
+        return None
+
+    @classmethod
+    def atualizar(cls, obj: Empresa):
+        cls.abrir()
+        e = cls.listar_id(obj.id)
+        if e != None:
+            e.nome = obj.nome
+            e.desc = obj.desc
+            e.dono = obj.dono
+        cls.salvar()
+
+    @classmethod
+    def excluir(cls, id):
+        cls.abrir()
+        e = cls.listar_id(id)
+        if e != None:
+            cls.objetos.remove(e)
+            cls.salvar()
+
+    @classmethod
+    def abrir(cls):
+        cls.objetos = []
+        try:
+            with open("empresas.json", mode = "r") as arquivo:
+                texto = json.load(arquivo)
+                for obj in texto:
+                    e = Empresa(obj["id"], obj["nome"], obj["desc"], obj["dono"]) #, dt.datetime.strptime(obj["data"], "%d/%m/%Y").date()
+                    cls.objetos.append(e)
+        except FileNotFoundError:
+            pass
+
+    @classmethod
+    def salvar(cls):
+        with open("empresas.json", mode = "w") as arquivo:
+            json.dump(cls.objetos, arquivo, default = vars)
