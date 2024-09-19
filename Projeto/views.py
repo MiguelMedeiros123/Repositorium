@@ -1,17 +1,49 @@
-from models import Funcionario, Funcionarios
+from models import Funcionario, Funcionarios, Setor, Setores
 import datetime as dt
 
 
-def Funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date, id_setor: int):
-    c = Funcionario(0, nome, ocup, nasc, cpf, email, custo, contr, id_setor)
-    Funcionarios.inserir(c)
+def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date):
+    f = Funcionario(0, nome, ocup, nasc, cpf, email, custo, contr, 0)
+    Funcionarios.inserir(f)
 
 def funcionario_listar():
     return Funcionarios.listar()
 
-def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date, id_setor: int):
-    c = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, id_setor)
-    Funcionarios.atualizar(c)
+def funcionario_listar_id(id: int):
+    return Funcionarios.listar_id(id)
 
-def funcionario_excluir(id):
+def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date, id_setor: int):
+    f = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, id_setor)
+    Funcionarios.atualizar(f)
+
+def funcionario_excluir(id: int):
     Funcionarios.excluir(id)
+
+def setor_inserir(nome: str, desc: str, data: dt.date):
+    s = Setor(0, nome, desc, data, [], 0)
+    Setores.inserir(s)
+
+def setor_listar():
+    return Setores.listar()
+
+def setor_listar_id(id: int):
+    return Setores.listar_id(id)
+
+def setor_atualizar(id: int, nome: str, desc: str, data: dt.date):
+    s = Setor(id, nome, desc, data, [], 0)
+    Setores.atualizar(s)
+
+def setor_excluir(id: int):
+    Setores.excluir(id)
+
+def setor_inserir_func(id_setor: int, id_func: int):
+    Setores.inserir_func(id_setor, id_func)
+
+def setor_listar_func(id_setor: int):
+    return Setores.listar_func(id_setor)
+
+def setor_listar_func_id(id_setor: int, id_func: int):
+    return Setores.listar_func_id(id_setor, id_func)
+
+def setor_remover_func(id_setor: int, id_func: int):
+    Setores.remover_func(id_setor, id_func)

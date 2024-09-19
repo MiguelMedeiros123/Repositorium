@@ -3,7 +3,7 @@ import datetime as dt
 
 
 class Funcionario:
-    def __init__(self, id: int, nome: str, ocup: str, nasc: dt.date, cpf: str, email: str, custo: float, contr: dt.date, id_setor: int) -> None:
+    def __init__(self, id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date, id_setor: int) -> None:
         self.id = id
         self.nome = nome
         self.ocup = ocup
@@ -22,11 +22,11 @@ class Funcionario:
         dic["id"] = self.id
         dic["nome"] = self.nome
         dic["ocup"] = self.ocup
-        dic["nasc"] = dt.datetime.strftime(self.nasc, "%d/%m/%Y")
+        dic["nasc"] = dt.date.strftime(self.nasc, "%d/%m/%Y")
         dic["cpf"] = self.cpf
         dic["email"] = self.email
         dic["custo"] = self.custo
-        dic["contr"] = dt.datetime.strftime(self.contr, "%d/%m/%Y")
+        dic["contr"] = dt.date.strftime(self.contr, "%d/%m/%Y")
         dic["id_setor"] = self.id_setor
         return dic
 
@@ -86,7 +86,7 @@ class Funcionarios:
             with open("funcionarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Funcionario(obj["id"], obj["nome"], obj["email"], dt.date.strptime(obj["nasc"], "%d/%m/%Y")adsadasfasdfdsjkfnsdjkfsdbjkhnfbhnjkafjbhkabhjkn)
+                    n = Funcionario(obj["id"], obj["nome"], obj["ocup"], dt.datetime.strptime(obj["nasc"], "%d/%m/%Y").date(), obj["cpf"], obj["email"], obj["custo"], dt.datetime.strptime(obj["contr"], "%d/%m/%Y"), obj["id_setor"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass
@@ -98,19 +98,26 @@ class Funcionarios:
 
 
 class Setor:
-    def __init__(self, id: int, nome: str, desc: str, data: dt.date) -> None:
+    def __init__(self, id: int, nome: str, desc: str, data: dt.date, funcionarios: list, custo: float) -> None:
         self.id = id
         self.nome = nome
         self.desc = desc
         self.data = data
-        self.funcionarios = []
-        self.custo = 0
+        self.funcionarios = funcionarios
+        self.custo = custo
 
     def __str__(self) -> str:
         return f"{self.id} - {self.nome}; {self.desc}; Criado a {self.data}; Funcionários - {len(self.funcionarios)}; Custo mensal - {self.custo}"
     
     def to_json(self):
         dic = {}
+        dic["id"] = self.id
+        dic["nome"] = self.nome
+        dic["desc"] = self.desc
+        dic["data"] = dt.date.strftime(self.data, "%d/%m/%Y")
+        dic["funcionarios"] = self.funcionarios
+        dic["custo"] = self.custo
+        return dic
 
 
 class Setores:
@@ -127,7 +134,7 @@ class Setores:
         cls.salvar()
 
     @classmethod
-    def listar(cls):
+    def listar(cls) -> list:
         cls.abrir()
         return cls.objetos
 
@@ -153,6 +160,10 @@ class Setores:
         cls.abrir()
         s = cls.listar_id(id)
         if s != None:
+            for f_id in s.funcionarios:
+                f = Funcionarios.listar_id(f_id)
+                f.id_setor = 0
+                Funcionarios.atualizar(f)
             cls.objetos.remove(s)
             cls.salvar()
 
@@ -165,10 +176,28 @@ class Setores:
             if f != None:
                 s.funcionarios.append(id_func)
                 s.custo += f.custo
+                f.id_setor = id
+                Funcionarios.atualizar(f)
                 cls.salvar()
-    
+
     @classmethod
-    def excluir_func(cls, id: int, id_func: int):
+    def listar_func(cls, id) -> list:
+        cls.abrir()
+        s = cls.listar_id(id)
+        if s!= None:
+            return s.funcionarios
+
+    @classmethod
+    def listar_func_id(cls, id: int, id_func: int):
+        cls.abrir()
+        s = cls.listar_id(id)
+        if s != None:
+            f = Funcionarios.listar_id(id_func)
+            if f.id in s.funcionarios: return f
+        return None
+
+    @classmethod
+    def remover_func(cls, id: int, id_func: int):
         cls.abrir()
         s = cls.listar_id(id)
         if s != None:
@@ -176,6 +205,8 @@ class Setores:
             if f.id in s.funcionarios:
                 s.funcionarios.remove(f.id)
                 s.custo -= f.custo
+                f.id_setor = 0
+                Funcionarios.atualizar(f)
                 cls.salvar()
 
     @classmethod
@@ -185,7 +216,7 @@ class Setores:
             with open("funcionarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Setor(obj["id"], obj["nome"], obj["email"], dt.date.strptime(obj["nasc"], "%d/%m/%Y")adsadasfasdfdsjkfnsdjkfsdbjkhnfbhnjkafjbhkabhjkn)
+                    n = Setor(obj["id"], obj["nome"], obj["desc"], dt.datetime.strptime(obj["data"], "%d/%m/%Y").date(), obj["funcionarios"], obj["custo"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass
