@@ -15,7 +15,7 @@ class Funcionario:
         self.id_setor = id_setor
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.date.strftime(self.nasc, "%d/%m/%Y")}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.date.strftime(self.contr, "%d/%m/%Y")}; ID do setor: {self.id_setor}"
+        return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.date.strftime(self.nasc, '%d/%m/%Y')}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.date.strftime(self.contr, '%d/%m/%Y')}; ID do setor: {self.id_setor}"
     
     def to_json(self):
         dic = {}
@@ -107,7 +107,7 @@ class Setor:
         self.custo = custo
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome}; {self.desc}; Criado a {self.data}; Funcionários - {len(self.funcionarios)}; Custo mensal - {self.custo}"
+        return f"{self.id} - {self.nome}; {self.desc}; Criado a {dt.date.strftime(self.date, '%d/%m/%Y')}; N.º de funcionários - {len(self.funcionarios)}; Custo mensal - {self.custo}"
     
     def to_json(self):
         dic = {}
