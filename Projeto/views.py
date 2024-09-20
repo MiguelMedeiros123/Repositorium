@@ -30,7 +30,7 @@ def setor_listar_id(id: int):
     return Setores.listar_id(id)
 
 def setor_atualizar(id: int, nome: str, desc: str, data: dt.date):
-    s = Setor(id, nome, desc, data, [], 0)
+    s = Setor(id, nome, desc, data, 0, 0)
     Setores.atualizar(s)
 
 def setor_excluir(id: int):
