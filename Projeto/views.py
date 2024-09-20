@@ -2,14 +2,14 @@ from models import Funcionario, Funcionarios, Setor, Setores, Empresa, Empresas
 import datetime as dt
 
 
-def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date):
+def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date):
     f = Funcionario(0, nome, ocup, nasc, cpf, email, custo, contr, 0)
     Funcionarios.inserir(f)
 
 def funcionario_listar():
     return Funcionarios.listar()
 
-def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date):
+def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date):
     f = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, 0)
     Funcionarios.atualizar(f)
 

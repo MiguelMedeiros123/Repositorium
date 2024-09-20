@@ -216,14 +216,14 @@ class Setores:
             e1 = Empresas.listar_id(s.id_empresa)
             if e1 != None:
                 e1.setores -= 1
-            Empresas.salvar()
+                Empresas.salvar()
             e2 = Empresas.listar_id(id_empresa)
             if e2 != None:
                 e2.setores += 1
                 s.id_empresa = id_empresa
                 Empresas.salvar()
-                cls.salvar()
             else: s.id_empresa = 0
+        cls.salvar()
 
     @classmethod
     def listar_empresa(cls, id_empresa: int) -> list:
