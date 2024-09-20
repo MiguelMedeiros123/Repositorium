@@ -71,10 +71,16 @@ class Funcionarios:
             f.email = obj.email
             f.custo = obj.custo
             f.contr = obj.contr
-            f.id_setor = obj.id_setor
         cls.salvar()
 
-    
+    @classmethod
+    def excluir(cls, id):
+        cls.abrir()
+        f = cls.listar_id(id)
+        if f != None:
+            cls.objetos.remove(f)
+            cls.salvar()
+
     @classmethod
     def mover_setor(cls, id_func: int, id_setor: int):
         cls.abrir()
@@ -104,16 +110,8 @@ class Funcionarios:
                 if f.id_setor == id_setor:
                     l.append(f)
                     return l
-        return None
-
-    @classmethod
-    def excluir(cls, id):
-        cls.abrir()
-        f = cls.listar_id(id)
-        if f != None:
-            cls.objetos.remove(f)
-            cls.salvar()
-
+        return []
+    
     @classmethod
     def abrir(cls):
         cls.objetos = []
@@ -142,7 +140,7 @@ class Setor:
         self.id_empresa = id_empresa
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome}; {self.desc}; Criado a {dt.date.strftime(self.date, '%d/%m/%Y')}; N.º de funcionários - {self.funcionarios}; Gasto mensal - {self.custo()}; ID da empresa - {self.id_empresa}"
+        return f"{self.id} - {self.nome}; {self.desc}; Criado a {dt.date.strftime(self.data, '%d/%m/%Y')}; N.º de funcionários - {self.funcionarios}; Gasto mensal - {self.custo()}; ID da empresa - {self.id_empresa}"
     
     def custo(self) -> float:
         custo = 0
@@ -170,7 +168,7 @@ class Setores:
         m = 0
         for s in cls.objetos:
             if s.id > m: m = s.id
-        obj.id = m
+        obj.id = m + 1
         cls.objetos.append(obj)
         cls.salvar()
 
@@ -194,11 +192,10 @@ class Setores:
             s.nome = obj.nome
             s.desc = obj.desc
             s.data = obj.data
-            s.id_empresa = obj.id_empresa
         cls.salvar()
     
     @classmethod
-    def excluir(cls, id):
+    def excluir(cls, id: int):
         cls.abrir()
         s = cls.listar_id(id)
         if s != None:
@@ -217,28 +214,28 @@ class Setores:
             Empresas.abrir()
             e1 = Setores.listar_id(s.id_empresa)
             if e1 != None:
-                e1.funcionarios -= 1
-                Empresas.atualizar(e1)
+                e1.setores -= 1
+            Empresas.salvar()
             e2 = Empresas.listar_id(id_empresa)
             if e2 != None:
-                e2.funcionarios += 1
+                e2.setores += 1
                 s.id_empresa = id_empresa
-                Empresas.atualizar(e2)
+                Empresas.salvar()
+                cls.salvar()
             else: s.id_empresa = 0
-            cls.atualizar(s)
 
     @classmethod
-    def listar_empresa(cls, id_empresa) -> list:
+    def listar_empresa(cls, id_empresa: int) -> list:
         Empresas.abrir()
-        s = Empresa.listar_id(id_empresa)
-        if s!= None:
+        e = Empresas.listar_id(id_empresa)
+        if e!= None:
             cls.abrir()
             l = []
             for s in cls.listar():
                 if s.id_empresa == id_empresa:
                     l.append(s)
                     return l
-        return None
+        return []
 
     @classmethod
     def abrir(cls):
@@ -269,7 +266,7 @@ class Empresa:
     
     def custo(self) -> float:
         custo = 0
-        for s in s.listar():
+        for s in Setores.listar():
             if s.id_empresa == self.id: custo += s.custo()
         return custo
         

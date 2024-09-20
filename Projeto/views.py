@@ -9,18 +9,21 @@ def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: st
 def funcionario_listar():
     return Funcionarios.listar()
 
-def funcionario_listar_id(id: int):
-    return Funcionarios.listar_id(id)
-
-def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date, id_setor: int):
-    f = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, id_setor)
+def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: str, contr: dt.date):
+    f = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, 0)
     Funcionarios.atualizar(f)
 
 def funcionario_excluir(id: int):
     Funcionarios.excluir(id)
 
+def funcionario_mover_setor(id_func: int, id_setor: int):
+    Funcionarios.mover_setor(id_func, id_setor)
+
+def funcionario_listar_setor(id_setor: int):
+    return Funcionarios.listar_setor(id_setor)
+
 def setor_inserir(nome: str, desc: str, data: dt.date):
-    s = Setor(0, nome, desc, data, [], 0)
+    s = Setor(0, nome, desc, data, 0, 0)
     Setores.inserir(s)
 
 def setor_listar():
@@ -36,27 +39,24 @@ def setor_atualizar(id: int, nome: str, desc: str, data: dt.date):
 def setor_excluir(id: int):
     Setores.excluir(id)
 
-def setor_inserir_func(id_setor: int, id_func: int):
-    Setores.inserir_func(id_setor, id_func)
+def setor_mover_empresa(id_setor: int, id_empresa: int):
+    Setores.mover_empresa(id_setor, id_empresa)
 
-def setor_listar_func(id_setor: int):
-    return Setores.listar_func(id_setor)
+def setor_listar_empresa(id_empresa: int):
+    return Setores.listar_empresa(id_empresa)
 
-def setor_listar_func_id(id_setor: int, id_func: int):
-    return Setores.listar_func_id(id_setor, id_func)
-
-def setor_remover_func(id_setor: int, id_func: int):
-    Setores.remover_func(id_setor, id_func)
-
-def empresa_inserir(nome: str, desc: str, dono: str):
-    e = Empresa(0, nome, desc, dono)
+def empresa_inserir(nome: str, desc: str, dono: str, fund: dt.date):
+    e = Empresa(0, nome, desc, dono, fund, 0)
     Empresas.inserir(e)
 
 def empresa_listar():
     return Empresas.listar()
 
-def empresa_atualizar(id: int, nome: str, desc: str, dono: str):
-    e = Empresa(id, nome, desc, dono)
+def empresa_listar_id(id: int):
+    return Empresas.listar_id(id)
+
+def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date):
+    e = Empresa(id, nome, desc, dono, fund, 0)
     Empresas.atualizar(e)
 
 def empresa_excluir(id: int):

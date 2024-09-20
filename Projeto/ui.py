@@ -5,13 +5,13 @@ class UI:
     @staticmethod
     def menu():
         print("Cadastro de empresas: ")
-        print("1 - inserir, 2 - listar, 3 - atualizar, 4 - excluir, 5 - listar especificamente.")
+        print("1 - inserir, 2 - listar, 3 - atualizar, 4 - excluir, 5 - dados detalhados.")
         print("Cadastro de setores: ")
-        print("6 - inserir, 7 - listar, 8 - atualizar, 9 - excluir, 10 - listar especificamente, 11 - mover a uma empresa")
+        print("6 - inserir, 7 - listar, 8 - atualizar, 9 - excluir, 10 - dados detalhados, 11 - mover a uma empresa")
         print("Cadastro de funcionários: ")
-        print("12 - inserir, 13 - listar, 14 - atualizar, 15 - excluir, 16 - inserir em setor.")
+        print("12 - inserir, 13 - listar, 14 - atualizar, 15 - excluir, 16 - mover a um setor.")
         print("17 - Fim.")
-        return int(input("Informe uma opção: "))
+        return int(input("\nInforme uma opção: "))
     
     @staticmethod
     def main():
@@ -41,7 +41,9 @@ class UI:
         nome = input("Informe o nome: ")
         desc = input("Informe a descrição: ")
         dono = input("Informe o dono: ")
-        views.empresa_inserir(nome, desc, dono)
+        fund = dt.datetime.strptime(input("Informe a data de fundação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
+        views.empresa_inserir(nome, desc, dono, fund)
+        print()
     
     @staticmethod
     def empresa_listar():
@@ -56,26 +58,37 @@ class UI:
         nome = input("Informe o novo nome: ")
         desc = input("Informe a nova descrição: ")
         dono = input("Informe o novo dono: ")
-        views.empresa_atualizar(id, nome, desc, dono)
+        fund = dt.datetime.strptime(input("Informe a data de fundação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
+        views.empresa_atualizar(id, nome, desc, dono, fund)
+        print()
     
     @staticmethod
     def empresa_excluir():
         UI.empresa_listar()
         id = int(input("Informe o ID da empresa a excluir: "))
         views.empresa_excluir(id)
+        print()
     
     @staticmethod
     def empresa_listar_id():
         UI.empresa_listar()
-        id = int(input("ID da empresa a listar: "))
-        aasdasdsa
+        id = int(input("\nID da empresa a listar: "))
+        print()
+        print(views.empresa_listar_id(id))
+        for s in views.setor_listar_empresa(id):
+            print(s)
+            for f in views.funcionario_listar_setor(s.id):
+                print(f)
+        print()
+
 
     @staticmethod
     def setor_inserir():
         nome = input("Informe o nome: ")
         desc = input("Informe a descrição: ")
-        data = dt.datetime.strptime(input("Informe a data de fundação (formato dd/mm/aaaa): "), "%d/%m/%Y")
+        data = dt.datetime.strptime(input("Informe a data de fundação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
         views.setor_inserir(nome, desc, data)
+        print()
     
     @staticmethod
     def setor_listar():
@@ -89,13 +102,80 @@ class UI:
         id = int(input("Informe o ID do setor a atualizar: "))
         nome = input("Informe o novo nome: ")
         desc = input("Informe a nova descrição: ")
-        data = dt.datetime.strptime(input("Informe a nova data de fundação (formato dd/mm/aaaa): "), "%d/%m/%Y")
+        data = dt.datetime.strptime(input("Informe a nova data de fundação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
         views.setor_atualizar(id, nome, desc, data)
+        print()
     
     @staticmethod
     def setor_excluir():
         UI.setor_listar()
         id = int(input("Informe o ID do setor a excluir: "))
         views.setor_excluir(id)
+        print()
+
+    @staticmethod
+    def setor_listar_id():
+        UI.setor_listar()
+        id = int(input("\nID do setor a listar: "))
+        print()
+        print(views.setor_listar_id(id))
+        for f in views.funcionario_listar_setor(id):
+            print(f)
+        print()
+
+    @staticmethod
+    def setor_mover_empresa():
+        UI.setor_listar()
+        id_setor = int(input("ID do setor a mover: "))
+        print()
+        UI.empresa_listar()
+        id_empresa = int(input("ID da empresa à qual mover-se-á o setor: "))
+        views.setor_mover_empresa(id_setor, id_empresa)
+
+
+    @staticmethod
+    def funcionario_inserir():
+        nome = input("Informe o nome: ")
+        ocup = input("Informe a ocupação: ")
+        nasc = dt.datetime.strptime(input("Informe a data de nascimento (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
+        cpf = input("Informe o CPF: ")
+        email = input("Informe o CPF: ")
+        custo = float(input("Informe o custo mensal: "))
+        contr = dt.datetime.strptime(input("Informe a data de contratação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
+        views.funcionario_inserir(nome, ocup, nasc, cpf, email, custo, contr)
+        print()
+    
+    @staticmethod
+    def funcionario_listar():
+        for f in views.funcionario_listar():
+            print(f)
+        print()
+    
+    @staticmethod
+    def funcionario_atualizar():
+        UI.funcionario_listar()
+        id = int(input("Informe o ID do funcionário a atualizar: "))
+        nome = input("Informe o novo nome: ")
+        ocup = input("Informe a nova ocupação: ")
+        nasc = dt.datetime.strptime(input("Informe a nova data de nascimento (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
+        cpf = input("Informe o novo CPF: ")
+        email = input("Informe o novo CPF: ")
+        custo = float(input("Informe o novo custo mensal: "))
+        contr = dt.datetime.strptime(input("Informe a nova data de contratação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
+        views.funcionario_atualizar(id, nome, ocup, nasc, cpf, email, custo, contr)
+        print()
+    
+    @staticmethod
+    def funcionario_excluir():
+        UI.funcionario_listar()
+        id = int(input("Informe o ID do funcionário a excluir: "))
+        views.funcionario_excluir(id)
+        print()
+
+    @staticmethod
+    def funcionario_mover_setor():
+        id_func = int(input("ID do funcionário a mover: "))
+        id_setor = int(input("ID do setor ao qual mover-se-á o funcionario: "))
+        views.funcionario_mover_setor(id_func, id_setor)
 
 UI.main()
