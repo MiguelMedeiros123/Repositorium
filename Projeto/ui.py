@@ -30,7 +30,7 @@ class UI:
             if op == 9: UI.setor_excluir()
             if op == 10: UI.setor_listar_id()
             if op == 11: UI.setor_mover_empresa()
-            if op == 12: UI.funcionario_inserir
+            if op == 12: UI.funcionario_inserir()
             if op == 13: UI.funcionario_listar()
             if op == 14: UI.funcionario_atualizar()
             if op == 15: UI.funcionario_excluir()
@@ -139,7 +139,7 @@ class UI:
         ocup = input("Informe a ocupação: ")
         nasc = dt.datetime.strptime(input("Informe a data de nascimento (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
         cpf = input("Informe o CPF: ")
-        email = input("Informe o CPF: ")
+        email = input("Informe o e-mail: ")
         custo = float(input("Informe o custo mensal: "))
         contr = dt.datetime.strptime(input("Informe a data de contratação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
         views.funcionario_inserir(nome, ocup, nasc, cpf, email, custo, contr)
@@ -174,7 +174,10 @@ class UI:
 
     @staticmethod
     def funcionario_mover_setor():
+        UI.funcionario_listar()
         id_func = int(input("ID do funcionário a mover: "))
+        print()
+        UI.setor_listar
         id_setor = int(input("ID do setor ao qual mover-se-á o funcionario: "))
         views.funcionario_mover_setor(id_func, id_setor)
 

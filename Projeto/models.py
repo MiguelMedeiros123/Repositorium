@@ -15,10 +15,11 @@ class Funcionario:
         self.id_setor = id_setor
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.date.strftime(self.nasc, '%d/%m/%Y')}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.date.strftime(self.contr, '%d/%m/%Y')}; ID do setor: {self.id_setor}; ID da empresa: {self.id_empresa()}."
+        return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.date.strftime(self.nasc, '%d/%m/%Y')}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.date.strftime(self.contr, '%d/%m/%Y')}; ID do setor: {self.id_setor}; ID da empresa: {self.id_empresa()}"
     
     def id_empresa(self) -> int:
-        return Setores.listar_id(self.id_setor).id_empresa
+        if Setores.listar_id(self.id_setor) == None: return 0
+        else: return Setores.listar_id(self.id_setor).id_empresa
 
     def to_json(self):
         dic = {}
@@ -90,14 +91,14 @@ class Funcionarios:
             s1 = Setores.listar_id(f.id_setor)
             if s1 != None:
                 s1.funcionarios -= 1
-                Setores.atualizar(s1)
+                Setores.salvar()
             s2 = Setores.listar_id(id_setor)
             if s2 != None:
                 s2.funcionarios += 1
                 f.id_setor = id_setor
-                Setores.atualizar(s2)
+                Setores.salvar()
             else: f.id_setor = 0
-            cls.atualizar(f)
+        cls.salvar()
 
     @classmethod
     def listar_setor(cls, id_setor) -> list:
@@ -212,7 +213,7 @@ class Setores:
         s = cls.listar_id(id_setor)
         if s != None:
             Empresas.abrir()
-            e1 = Setores.listar_id(s.id_empresa)
+            e1 = Empresas.listar_id(s.id_empresa)
             if e1 != None:
                 e1.setores -= 1
             Empresas.salvar()
