@@ -110,7 +110,7 @@ class Funcionarios:
             for f in cls.listar():
                 if f.id_setor == id_setor:
                     l.append(f)
-                    return l
+            return l
         return []
     
     @classmethod
@@ -200,10 +200,6 @@ class Setores:
         cls.abrir()
         s = cls.listar_id(id)
         if s != None:
-            for f_id in s.funcionarios:
-                f = Funcionarios.listar_id(f_id)
-                f.id_setor = 0
-                Funcionarios.atualizar(f)
             cls.objetos.remove(s)
             cls.salvar()
 
@@ -235,7 +231,7 @@ class Setores:
             for s in cls.listar():
                 if s.id_empresa == id_empresa:
                     l.append(s)
-                    return l
+            return l
         return []
 
     @classmethod

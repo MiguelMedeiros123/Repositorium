@@ -4,7 +4,7 @@ import datetime as dt
 class UI:
     @staticmethod
     def menu():
-        print("Cadastro de empresas: ")
+        print("\nCadastro de empresas: ")
         print("1 - inserir, 2 - listar, 3 - atualizar, 4 - excluir, 5 - dados detalhados.")
         print("Cadastro de setores: ")
         print("6 - inserir, 7 - listar, 8 - atualizar, 9 - excluir, 10 - dados detalhados, 11 - mover a uma empresa")
@@ -63,7 +63,7 @@ class UI:
         ocup = input("Informe a nova ocupação: ")
         nasc = dt.datetime.strptime(input("Informe a nova data de nascimento (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
         cpf = int(input("Informe o novo CPF: "))
-        email = input("Informe o novo CPF: ")
+        email = input("Informe o novo email: ")
         custo = float(input("Informe o novo custo mensal: "))
         contr = dt.datetime.strptime(input("Informe a nova data de contratação (formato dd/mm/aaaa): "), "%d/%m/%Y").date()
         views.funcionario_atualizar(id, nome, ocup, nasc, cpf, email, custo, contr)
@@ -81,7 +81,7 @@ class UI:
         UI.funcionario_listar()
         id_func = int(input("ID do funcionário a mover: "))
         print()
-        UI.setor_listar
+        UI.setor_listar()
         id_setor = int(input("ID do setor ao qual mover-se-á o funcionario: "))
         views.funcionario_mover_setor(id_func, id_setor)
 
@@ -123,8 +123,9 @@ class UI:
         id = int(input("\nID do setor a listar: "))
         print()
         print(views.setor_listar_id(id))
+        print("\n   Funcionários:\n")
         for f in views.funcionario_listar_setor(id):
-            print(f)
+            print(f"   {f}")
         print()
 
     @staticmethod
@@ -173,14 +174,16 @@ class UI:
     @staticmethod
     def empresa_listar_id():
         UI.empresa_listar()
-        id = int(input("\nID da empresa a listar: "))
+        id = int(input("ID da empresa a listar: "))
         print()
         print(views.empresa_listar_id(id))
+        print("\n   Setores:\n")
         for s in views.setor_listar_empresa(id):
-            print(s)
+            print(f"   {s}")
+            print("\n       Funcionários:\n")
             for f in views.funcionario_listar_setor(s.id):
-                print(f)
-        print()
+                print(f"       {f}")
+            print()
 
 
 UI.main()
