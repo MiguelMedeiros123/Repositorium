@@ -117,7 +117,7 @@ class Funcionarios:
     def abrir(cls):
         cls.objetos = []
         try:
-            with open("funcionarios.json", mode = "r") as arquivo:
+            with open("Projeto/funcionarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     f = Funcionario(obj["id"], obj["nome"], obj["ocup"], dt.datetime.strptime(obj["nasc"], "%d/%m/%Y").date(), obj["cpf"], obj["email"], obj["custo"], dt.datetime.strptime(obj["contr"], "%d/%m/%Y"), obj["id_setor"])
@@ -127,7 +127,7 @@ class Funcionarios:
 
     @classmethod
     def salvar(cls):
-        with open("funcionarios.json", mode = "w") as arquivo:
+        with open("Projeto/funcionarios.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Funcionario.to_json)
 
 
@@ -238,7 +238,7 @@ class Setores:
     def abrir(cls):
         cls.objetos = []
         try:
-            with open("setores.json", mode = "r") as arquivo:
+            with open("Projeto/setores.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     n = Setor(obj["id"], obj["nome"], obj["desc"], dt.datetime.strptime(obj["data"], "%d/%m/%Y").date(), obj["funcionarios"], obj["id_empresa"])
@@ -248,7 +248,7 @@ class Setores:
 
     @classmethod
     def salvar(cls):
-        with open("setores.json", mode = "w") as arquivo:
+        with open("Projeto/setores.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Setor.to_json)
 
 
@@ -328,7 +328,7 @@ class Empresas:
     def abrir(cls):
         cls.objetos = []
         try:
-            with open("empresas.json", mode = "r") as arquivo:
+            with open("Projeto/empresas.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     e = Empresa(obj["id"], obj["nome"], obj["desc"], obj["dono"], dt.datetime.strptime(obj["fund"], "%d/%m/%Y").date(), obj["setores"])
@@ -338,5 +338,5 @@ class Empresas:
 
     @classmethod
     def salvar(cls):
-        with open("empresas.json", mode = "w") as arquivo:
+        with open("Projeto/empresas.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Empresa.to_json)

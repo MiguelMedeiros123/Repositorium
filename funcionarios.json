@@ -1,1 +1,0 @@
-[{"id": 1, "nome": "Ceolbert", "ocup": "Admin", "nasc": "11/11/1991", "cpf": "11111111", "email": "11111", "custo": 1000.0, "contr": "11/11/2011", "id_setor": 1}, {"id": 2, "nome": "Robert Robertsen", "ocup": "Advogado", "nasc": "11/11/1981", "cpf": 22222222, "email": "ceolbert@email", "custo": 2000.0, "contr": "11/11/2011", "id_setor": 2}]
