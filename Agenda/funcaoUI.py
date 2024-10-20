@@ -17,7 +17,19 @@ class UI:
             st.write(f"Vértice = ({y.xv()}, {y.yv()})")
             st.write(f"Raízes: x1 = {y.x1()}  ;  x2 = {y.x2()}")
 
-            xn = []
-            yn = []
-            min = y.xv() - 10
-            max = y.xv
+            px = []
+            py = []
+            min = y.xv() - 5
+            max = y.xv() + 5
+            n = 200
+            dx = (max - min)/n
+            x = min
+            while x < max:
+                dy = y.f(x)
+                py.append(dy)
+                px.append(x)
+                x += dx
+            
+            dic = {"x": px, "y": py}
+            chart_data = pd.DataFrame(dic)
+            st.line_chart(chart_data, x = "x", y = "y")

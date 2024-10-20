@@ -5,11 +5,12 @@ class Funcao:
         self.c = c
     
     def __str__(self) -> str:
-        y = (f"{self.a}x^2 ")
+        if self.a != 1: y = (f"{self.a}x^2 ")
+        else: y = "x^2"
         if self.b > 0: y += (f"+{self.b}x ")
-        if self.b < 0: y += (f"{self.b}x ")
+        elif self.b < 0: y += (f"{self.b}x ")
         if self.c > 0: y += (f"+{self.c}")
-        if self.c < 0: y += (f"{self.c}")
+        elif self.c < 0: y += (f"{self.c}")
         return y
     def delta(self):
         return self.b**2 - 4*self.a*self.c
