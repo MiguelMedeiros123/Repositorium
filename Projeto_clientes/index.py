@@ -1,3 +1,3 @@
-from ui import indexUI
+from ui import IndexUI
 
-indexUI.main()
+IndexUI.main()
