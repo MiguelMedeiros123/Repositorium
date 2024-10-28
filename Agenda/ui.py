@@ -5,7 +5,7 @@ import view
 class IndexUI:
     @staticmethod
     def main():
-        menu = st.sidebar.selectbox("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços")
+        menu = st.sidebar.selectbox("Menu", ("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços"))
 
         if menu == "Cadastro de Clientes":
             ManterClienteUI.main()
