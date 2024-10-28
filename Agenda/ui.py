@@ -5,29 +5,36 @@ import view
 class IndexUI:
     @staticmethod
     def main():
-        st.header("Cadastro de clientes")
-        listar, inserir, atualizar, excluir = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
+        menu = st.sidebar.selectbox("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços")
 
-        with listar:
-            ManterClienteUI.main(1)
+        if menu == "Cadastro de Clientes":
+            ManterClienteUI.main()
 
-        with inserir:
-            ManterClienteUI.main(2)
+        if menu == "Cadastro de Horários":
+            ManterHorarioUI.main()
 
-        with atualizar:
-            ManterClienteUI.main(3)
+        if menu == "Cadastro de Serviços":
+            ManterServicoUI.main()
 
-        with excluir:
-            ManterClienteUI.main(4)
 
 
 class ManterClienteUI:
     @staticmethod
-    def main(op):
-        if op == 1: ManterClienteUI.Listar()
-        if op == 2: ManterClienteUI.Inserir()
-        if op == 3: ManterClienteUI.Atualizar()
-        if op == 4: ManterClienteUI.Excluir()
+    def main():
+        st.header("Cadastro de clientes")
+        listar, inserir, atualizar, excluir = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
+
+        with listar:
+            ManterClienteUI.Listar()
+
+        with inserir:
+            ManterClienteUI.Inserir()
+
+        with atualizar:
+            ManterClienteUI.Atualizar()
+
+        with excluir:
+            ManterClienteUI.Excluir()
     
     @staticmethod
     def Listar():
@@ -67,3 +74,17 @@ class ManterClienteUI:
         c = st.selectbox("Cliente a excluir", view.cliente_listar())
         if st.button("Excluir"):
             view.cliente_excluir(c.id)
+
+
+
+
+class ManterHorarioUI:
+    def main():
+        st.write("HORARIO")
+
+
+
+
+class ManterServicoUI:
+    def main():
+        st.write("SERVICO")

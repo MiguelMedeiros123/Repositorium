@@ -1,3 +1,3 @@
-from funcaoUI import UI
+from ui import IndexUI
 
-UI.main()
+IndexUI.main()
