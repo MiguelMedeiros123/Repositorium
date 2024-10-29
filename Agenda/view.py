@@ -1,20 +1,20 @@
-from models import Cliente, Clientes, Horario, Horarios, Servico, Servicos
+from models import clientes, horarios, servicos
 import datetime as dt
 
 
-def cliente_inserir(nome: str, email: str, fone: str):
-    c = Cliente(0, nome, email, fone)
+def cliente_inserir(nome: str, email: str, fone: str, senha: str):
+    c = Cliente(0, nome, email, fone, senha)
     Clientes.inserir(c)
 
 def cliente_listar() -> list:
     return Clientes.listar()
 
-def cliente_atualizar(id: int, nome: str, email: str, fone: str):
-    c = Cliente(id, nome, email, fone)
+def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str):
+    c = Cliente(id, nome, email, fone, senha)
     Clientes.atualizar(c)
 
 def cliente_excluir(id: int):
-    c = Cliente(id, "", "", "")
+    c = Cliente(id, "", "", "", "")
     Clientes.excluir(c)
 
 
