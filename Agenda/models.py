@@ -72,15 +72,23 @@ class Clientes:
 
 
 class Horario:
-    def __init__(self, id, d):
+    def __init__(self, id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
         self.id = id
-        self.data = d
-        self.confirmado = False
-        self.idCliente = 0
-        self.idServico = 0
+        self.data = data
+        self.confirmado = confirmado
+        self.idCliente = idCliente
+        self.idServico = idServico
     def __str__(self):
         return f"{self.id} - {self.data} - {self.confirmado} - {self.idCliente} - {self.idServico}"
-  
+    def to_json(self):
+        dic = {}
+        dic["id"] = self.id
+        dic["data"] = dt.datetime.strftime(self.data, "%d/%m/%Y %H:%M")
+        dic["confirmado"] = self.confirmado
+        dic["idCliente"] = self.idCliente
+        dic["idServico"] = self.idServico
+        return dic
+
 class Horarios:
     objetos = []
 
@@ -130,7 +138,7 @@ class Horarios:
             with open("Agenda/horarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Horario(obj["id"], obj["data"])
+                    n = Horario(obj["id"], dt.datetime.strptime(obj["data"], "%d/%m/%Y %H:%M"), obj["confirmado"], obj["idCliente"], obj["idServico"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass
@@ -138,7 +146,7 @@ class Horarios:
     @classmethod
     def salvar(cls):
         with open("Agenda/horarios.json", mode = "w") as arquivo:
-            json.dump(cls.objetos, arquivo, default = vars)
+            json.dump(cls.objetos, arquivo, default = Horario.to_json)
 
 
 
@@ -200,7 +208,7 @@ class Servicos:
             with open("Agenda/servicos.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Servico(obj["id"], obj["nome"], obj["email"], obj["fone"])                     # dicionário
+                    n = Servico(obj["id"], obj["nome"], obj["email"], obj["fone"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass

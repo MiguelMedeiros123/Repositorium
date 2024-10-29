@@ -1,5 +1,5 @@
 from models import Cliente, Clientes, Horario, Horarios, Servico, Servicos
-
+import datetime as dt
 
 
 def cliente_inserir(nome: str, email: str, fone: str):
@@ -19,20 +19,20 @@ def cliente_excluir(id: int):
 
 
 
-# def horario_inserir(1xxxxxx):
-#     h = Horario(0, xxxxx)
-#     Horarios.inserir(h)
+def horario_inserir(data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
+    h = Horario(0, data, confirmado, idCliente, idServico)
+    Horarios.inserir(h)
 
-# def horario_listar() -> list:
-#     return Horarios.listar()
+def horario_listar() -> list:
+    return Horarios.listar()
 
-# def horario_atualizar(1xxxxxxx):
-#     h = Horario(xxxxxxx)
-#     Horarios.atualizar(h)
+def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
+    h = Horario(id, data, confirmado, idCliente, idServico)
+    Horarios.atualizar(h)
 
-# def horario_excluir(id: int):
-#     h = Horario(id, xxxxxx)
-#     Horarios.excluir(h)
+def horario_excluir(id: int):
+    h = Horario(id, "", "", "", "")
+    Horarios.excluir(h)
 
 
 
