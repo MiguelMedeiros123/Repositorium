@@ -54,7 +54,7 @@ class Servicos:
     def abrir(cls):
         cls.objetos = []
         try: 
-            with open("Agenda/Dados/servicos.json", mode = "r") as arquivo:
+            with open("Agenda/dados/servicos.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     n = Servico(obj["id"], obj["descricao"], obj["valor"], obj["duracao"])
@@ -64,5 +64,5 @@ class Servicos:
 
     @classmethod
     def salvar(cls):
-        with open("Agenda/Dados/servicos.json", mode = "w") as arquivo:
+        with open("Agenda/dados/servicos.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default=vars)

@@ -65,7 +65,7 @@ class Horarios:
     def abrir(cls):
         cls.objetos = []
         try:
-            with open("Agenda/Dados/horarios.json", mode = "r") as arquivo:
+            with open("Agenda/dados/horarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     n = Horario(obj["id"], dt.datetime.strptime(obj["data"], "%d/%m/%Y %H:%M"), obj["confirmado"], obj["idCliente"], obj["idServico"])
@@ -75,5 +75,5 @@ class Horarios:
 
     @classmethod
     def salvar(cls):
-        with open("Agenda/Dados/horarios.json", mode = "w") as arquivo:
+        with open("Agenda/dados/horarios.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Horario.to_json)

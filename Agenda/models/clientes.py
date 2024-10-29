@@ -54,14 +54,14 @@ class Clientes:
 
     @classmethod
     def salvar(cls):  
-        with open("Agenda/Dados/clientes.json", mode = "w") as arquivo:
+        with open("Agenda/dados/clientes.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = vars) 
 
     @classmethod
     def abrir(cls):
         cls.objetos = []
         try: 
-            with open("Agenda/Dados/clientes.json", mode = "r") as arquivo:
+            with open("Agenda/dados/clientes.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     c = Cliente(obj["id"], obj["nome"], obj["email"], obj["fone"], obj["senha"])

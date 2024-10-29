@@ -1,6 +1,6 @@
-from models import clientes, horarios, servicos
-import datetime as dt
-
+from models.clientes import *
+from models.horarios import *
+from models.servicos import *
 
 def cliente_inserir(nome: str, email: str, fone: str, senha: str):
     c = Cliente(0, nome, email, fone, senha)
