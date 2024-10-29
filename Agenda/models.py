@@ -8,7 +8,7 @@ class Cliente:
         self.email = email
         self.fone = fone
     def __str__(self):
-        return f"{self.id} - {self.nome} - {self.email} - {self.fone}"
+        return f"{self.id} - {self.nome} - {self.email} - Tel: {self.fone}"
     
 class Clientes:
     objetos = []
@@ -53,14 +53,14 @@ class Clientes:
 
     @classmethod
     def salvar(cls):  
-        with open("Agenda/clientes.json", mode = "w") as arquivo:
+        with open("Agenda/Dados/clientes.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = vars) 
 
     @classmethod
     def abrir(cls):
         cls.objetos = []
         try: 
-            with open("Agenda/clientes.json", mode = "r") as arquivo:
+            with open("Agenda/Dados/clientes.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     c = Cliente(obj["id"], obj["nome"], obj["email"], obj["fone"])
@@ -79,7 +79,7 @@ class Horario:
         self.idCliente = idCliente
         self.idServico = idServico
     def __str__(self):
-        return f"{self.id} - {self.data} - {self.confirmado} - {self.idCliente} - {self.idServico}"
+        return f"{self.id} - {dt.datetime.strftime(self.data, "%d/%m/%Y %H:%M")}"
     def to_json(self):
         dic = {}
         dic["id"] = self.id
@@ -135,7 +135,7 @@ class Horarios:
     def abrir(cls):
         cls.objetos = []
         try:
-            with open("Agenda/horarios.json", mode = "r") as arquivo:
+            with open("Agenda/Dados/horarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
                     n = Horario(obj["id"], dt.datetime.strptime(obj["data"], "%d/%m/%Y %H:%M"), obj["confirmado"], obj["idCliente"], obj["idServico"])
@@ -145,7 +145,7 @@ class Horarios:
 
     @classmethod
     def salvar(cls):
-        with open("Agenda/horarios.json", mode = "w") as arquivo:
+        with open("Agenda/Dados/horarios.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Horario.to_json)
 
 
@@ -158,7 +158,7 @@ class Servico:
         self.valor = valor
         self.duracao = duracao
     def __str__(self):
-        return f"{self.id} - {self.descricao} - {self.valor} - {self.duracao}"
+        return f"{self.id} - {self.descricao} - ${self.valor} - {self.duracao}min"
 
 class Servicos:
     objetos = []
@@ -205,15 +205,15 @@ class Servicos:
     def abrir(cls):
         cls.objetos = []
         try: 
-            with open("Agenda/servicos.json", mode = "r") as arquivo:
+            with open("Agenda/Dados/servicos.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Servico(obj["id"], obj["nome"], obj["email"], obj["fone"])
+                    n = Servico(obj["id"], obj["descricao"], obj["valor"], obj["duracao"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass
 
     @classmethod
     def salvar(cls):
-        with open("Agenda/servicos.json", mode = "w") as arquivo:
+        with open("Agenda/Dados/servicos.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default=vars)
