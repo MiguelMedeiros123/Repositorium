@@ -2,11 +2,12 @@ from ui.cliente_ui import *
 from ui.horario_ui import *
 from ui.servico_ui import *
 from ui.agenda_ui import *
+from ui.conta_ui import *
 
 class IndexUI:
     @staticmethod
     def main():
-        menu = st.sidebar.selectbox("Menu", ("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços", "Abrir Agenda do Dia"))
+        menu = st.sidebar.selectbox("Menu", ("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços", "Abrir Agenda do Dia", "Abrir Conta"))
 
         if menu == "Cadastro de Clientes":
             ManterClienteUI.main()
@@ -19,3 +20,6 @@ class IndexUI:
         
         if menu == "Abrir Agenda do Dia":
             AbrirAgendaUI.main()
+        
+        if menu == "Abrir Conta":
+            AbrirContaUI.main()

@@ -29,17 +29,25 @@ class ManterHorarioUI:
                 ldata.append(h.data)
                 lconfirmado.append(h.confirmado)
 
+                bc = False
                 for c in view.cliente_listar():
-                    if c.id == h.idCliente: lCliente.append(c.nome)
-                    else: lCliente.append("Nenhum")
+                    if c.id == h.idCliente:
+                        lCliente.append(c.nome)
+                        bc = True
+                        break
+                if bc == False: lCliente.append("Nenhum")
 
+                bs = False
                 for s in view.servico_listar():
-                    if s.id == h.idServico: lServico.append(s.descricao)
-                    else: lServico.append("Nenhum")
+                    if s.id == h.idServico:
+                        lServico.append(s.descricao)
+                        bs = True
+                        break
+                if bs == False: lServico.append("Nenhum")
                 
-            dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado, "idCliente": lCliente, "idServico": lServico}
+            dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado, "cliente": lCliente, "servico": lServico}
             graph = pd.DataFrame(dic)
-            st.dataframe(graph, column_config = {"id": "ID", "data": "data", "confirmado": "Confirmado", "idCliente": "ID do Cliente", "idServico": "ID do Serviço"}, hide_index=True)
+            st.dataframe(graph, column_config = {"id": "ID", "data": "data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True)
 
     @staticmethod
     def Inserir():
