@@ -22,15 +22,22 @@ class ManterHorarioUI:
             lid = []
             ldata = []
             lconfirmado = []
-            lidCliente = []
-            lidServico = []
+            lCliente = []
+            lServico = []
             for h in horarios:
                 lid.append(h.id)
                 ldata.append(h.data)
                 lconfirmado.append(h.confirmado)
-                lidCliente.append(h.idCliente)
-                lidServico.append(h.idServico)
-            dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado, "idCliente": lidCliente, "idServico": lidServico}
+
+                for c in view.cliente_listar():
+                    if c.id == h.idCliente: lCliente.append(c.nome)
+                    else: lCliente.append("Nenhum")
+
+                for s in view.servico_listar():
+                    if s.id == h.idServico: lServico.append(s.descricao)
+                    else: lServico.append("Nenhum")
+                
+            dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado, "idCliente": lCliente, "idServico": lServico}
             graph = pd.DataFrame(dic)
             st.dataframe(graph, column_config = {"id": "ID", "data": "data", "confirmado": "Confirmado", "idCliente": "ID do Cliente", "idServico": "ID do Serviço"}, hide_index=True)
 
