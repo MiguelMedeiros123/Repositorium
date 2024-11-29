@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import view
+import time
 
 class ManterServicoUI:
     def main():
@@ -39,6 +40,7 @@ class ManterServicoUI:
         if st.button("Inserir"):
             view.servico_inserir(descricao, float(valor), int(duracao))
             st.success("Serviço inserido.")
+            time.sleep(2)
             st.rerun()
 
     @staticmethod
@@ -54,6 +56,7 @@ class ManterServicoUI:
             if st.button("Atualizar"):
                 view.servico_atualizar(s.id, descricao, float(valor), int(duracao))
                 st.success("Serviço atualizado.")
+                time.sleep(2)
                 st.rerun()
 
     @staticmethod
@@ -66,4 +69,5 @@ class ManterServicoUI:
             if st.button("Excluir"):
                 view.servico_excluir(s.id)
                 st.success("Serviço excluído.")
+                time.sleep(2)
                 st.rerun()

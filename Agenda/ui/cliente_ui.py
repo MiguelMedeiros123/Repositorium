@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import view
+import time
 
 class ManterClienteUI:
     @staticmethod
@@ -45,6 +46,7 @@ class ManterClienteUI:
             if e:
                 view.cliente_inserir(nome, email, fone, senha)
                 st.success("Cliente inserido.")
+                time.sleep(2)
                 st.rerun()
             else:
                 st.error("Insira um email válido que não está sendo usado.")
@@ -67,6 +69,7 @@ class ManterClienteUI:
                 if e:
                     view.cliente_atualizar(c.id, nome, email, fone, senha)
                     st.success("Cliente inserido.")
+                    time.sleep(2)
                     st.rerun()
                 else:
                     st.error("Insira um email válido que não está sendo usado.")
@@ -81,4 +84,5 @@ class ManterClienteUI:
             if st.button("Excluir"):
                 view.cliente_excluir(c.id)
                 st.success("Cliente excluído.")
+                time.sleep(2)
                 st.rerun()

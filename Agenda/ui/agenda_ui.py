@@ -1,6 +1,6 @@
 import streamlit as st
 import view
-import datetime as dt
+import time
 
 class AbrirAgendaUI:
     def main():
@@ -12,14 +12,8 @@ class AbrirAgendaUI:
         horain = st.text_input("Informa a hora de início no formato _HH:MM_")
         horafim = st.text_input("Informa o início do último horário no formato _HH:MM_")
         intervalo = st.text_input("Informa o intervalo entre os horários em _min_")
-
         if st.button("Inserir horários"):
-            hora = dt.datetime.strptime(f"{dia} {horain}", "%d/%m/%Y %H:%M")
-            delta = dt.timedelta(minutes=int(intervalo))
-            horamax = dt.datetime.strptime(f"{dia} {horafim}", "%d/%m/%Y %H:%M")
-            while hora < horamax:
-                view.horario_inserir(hora, False, 0, 0)
-                hora += delta
-            view.horario_inserir(horamax, False, 0, 0)
+            view.horario_abrir_agenda(dia, horain, horafim, int(intervalo))
             st.success("Horários inseridos.")
+            time.sleep(2)
             st.rerun()

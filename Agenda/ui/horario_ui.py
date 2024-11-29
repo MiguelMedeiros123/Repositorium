@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import view
 import datetime as dt
+import time
 
 class ManterHorarioUI:
     def main():
@@ -74,6 +75,7 @@ class ManterHorarioUI:
             data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
             view.horario_inserir(data, confirmado, idCliente, idServico)
             st.success("Horário inserido.")
+            time.sleep(2)
             st.rerun()
 
     @staticmethod
@@ -115,6 +117,7 @@ class ManterHorarioUI:
                 data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
                 view.horario_atualizar(h.id, data, confirmado, idCliente, idServico)
                 st.success("Horário atualizado.")
+                time.sleep(2)
                 st.rerun()
 
     @staticmethod
@@ -127,4 +130,5 @@ class ManterHorarioUI:
             if st.button("Excluir"):
                 view.horario_excluir(h.id)
                 st.success("Horário excluído.")
+                time.sleep
                 st.rerun()

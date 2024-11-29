@@ -34,6 +34,14 @@ def horario_excluir(id: int):
     h = Horario(id, "", "", "", "")
     Horarios.excluir(h)
 
+def horario_abrir_agenda(data: str, hora_inicio: str, hora_fim: str, intervalo: int):
+    hora = dt.datetime.strptime(f"{data} {hora_inicio}", "%d/%m/%Y %H:%M")
+    delta = dt.timedelta(minutes=intervalo)
+    horamax = dt.datetime.strptime(f"{data} {hora_fim}", "%d/%m/%Y %H:%M")
+    while hora < horamax:
+        horario_inserir(hora, False, 0, 0)
+        hora += delta
+    horario_inserir(horamax, False, 0, 0)
 
 
 def servico_inserir(descricao: str, valor: float, duracao: int):

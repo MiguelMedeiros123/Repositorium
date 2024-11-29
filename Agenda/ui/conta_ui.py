@@ -1,5 +1,6 @@
 import streamlit as st
 import view
+import time
 
 class AbrirContaUI:
     @staticmethod
@@ -17,6 +18,7 @@ class AbrirContaUI:
             if e:
                 view.cliente_inserir(nome, email, fone, senha)
                 st.success("Cliente inserido.")
+                time.sleep(2)
                 st.rerun()
             else:
                 st.error("Insira um email válido que não está sendo usado.")
