@@ -24,6 +24,12 @@ def cliente_excluir(id: int):
     c = Cliente(id, "", "", "", "")
     Clientes.excluir(c)
 
+def cliente_autenticar(email: str, senha: str) -> dict:
+    for c in cliente_listar():
+        if c.email == email and c.senha == senha:
+            return {"id": c.id, "nome": c.nome}
+    return None
+
 
 
 def horario_inserir(data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
@@ -49,6 +55,13 @@ def horario_abrir_agenda(data: str, hora_inicio: str, hora_fim: str, intervalo: 
         horario_inserir(hora, False, 0, 0)
         hora += delta
     horario_inserir(horamax, False, 0, 0)
+
+def horario_disponivel_listar():
+    horarios = []
+    for h in horario_listar():
+        if h.data >= dt.datetime.now() and h.idCliente == 0: horarios.append(h)
+    return horarios
+
 
 
 def servico_inserir(descricao: str, valor: float, duracao: int):

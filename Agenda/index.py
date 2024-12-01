@@ -3,6 +3,8 @@ from ui.horario_ui import ManterHorarioUI
 from ui.servico_ui import ManterServicoUI
 from ui.agenda_ui import AbrirAgendaUI
 from ui.conta_ui import AbrirContaUI
+from ui.login_ui import LoginUI
+from ui.listar_horario_ui import ListarHorarioUI
 
 import view
 
@@ -12,23 +14,39 @@ class IndexUI:
     @staticmethod
     def main():
         view.cliente_admin()
+        IndexUI.sidebar()
 
-        menu = st.sidebar.selectbox("Menu", ("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços", "Abrir Agenda do Dia", "Abrir Conta"))
+    def sidebar():
+        if "conta_id" not in st.session_state:
+            IndexUI.menu_visitantes()
+        else:
+            nome = st.session_state["conta_nome"]
+            st.sidebar.write(f"Bem vindo(a), {nome}.")
+            if nome == "admin": IndexUI.menu_admin()
+            else: IndexUI.menu_cliente()
+            IndexUI.sair()
 
-        if menu == "Cadastro de Clientes":
-            ManterClienteUI.main()
+    def menu_visitantes():
+        op = st.sidebar.selectbox("Menu", ("Entrar no sistema", "Abrir conta"))
+        if op == "Entrar no sistema": LoginUI.main()
+        if op == "Abrir conta": AbrirContaUI.main()
 
-        if menu == "Cadastro de Horários":
-            ManterHorarioUI.main()
+    def menu_admin():
+        op = st.sidebar.selectbox("Menu", ("Cadastro de Clientes", "Cadastro de Horários", "Cadastro de Serviços", "Abrir Agenda do Dia"))
+        if op == "Cadastro de Clientes": ManterClienteUI.main()
+        if op == "Cadastro de Horários": ManterHorarioUI.main()
+        if op == "Cadastro de Serviços": ManterServicoUI.main()      
+        if op == "Abrir Agenda do Dia": AbrirAgendaUI.main()
 
-        if menu == "Cadastro de Serviços":
-            ManterServicoUI.main()
-        
-        if menu == "Abrir Agenda do Dia":
-            AbrirAgendaUI.main()
-        
-        if menu == "Abrir Conta":
-            AbrirContaUI.main()
+    def menu_cliente():
+        op = st.sidebar.selectbox("Menu", ("Horários Disponíveis"))
+        if op == "Horários Disponíveis": ListarHorarioUI.main()
+
+    def sair():
+        if st.sidebar.button("Sair do sistema"):
+            del st.session_state["conta_id"]
+            del st.session_state["conta_nome"]
+            st.rerun()
 
 
 
