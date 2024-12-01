@@ -2,6 +2,13 @@ from models.clientes import *
 from models.horarios import *
 from models.servicos import *
 
+
+
+def cliente_admin():
+    for c in cliente_listar():
+        if c.nome == "admin": return
+    cliente_inserir("admin", "admin", "1234", "1234")
+
 def cliente_inserir(nome: str, email: str, fone: str, senha: str):
     c = Cliente(0, nome, email, fone, senha)
     Clientes.inserir(c)

@@ -17,8 +17,8 @@ class AbrirContaUI:
                 if c.email == email: e = False
             if e:
                 view.cliente_inserir(nome, email, fone, senha)
-                st.success("Cliente inserido.")
+                st.success("Conta criada com sucesso.")
                 time.sleep(2)
                 st.rerun()
             else:
-                st.error("Insira um email válido que não está sendo usado.")
+                st.error("Insere um email válido que não esteja em uso.")
