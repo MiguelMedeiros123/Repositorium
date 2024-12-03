@@ -46,9 +46,9 @@ class ManterHorarioUI:
                         break
                 if bs == False: lServico.append("Nenhum")
                 
-            dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado, "cliente": lCliente, "servico": lServico}
+            dic = {"id": lid, "data" : ldata, "confirmado": lconfirmado, "cliente": lCliente, "servico": lServico}
             graph = pd.DataFrame(dic)
-            st.dataframe(graph, column_config = {"id": "ID", "data": "data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True)
+            st.data_editor(graph, column_config = {"id": "ID", "data": "Data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True, disabled=("id", "data", "cliente", "servico"))
 
     @staticmethod
     def Inserir():

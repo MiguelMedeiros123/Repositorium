@@ -16,6 +16,11 @@ def cliente_inserir(nome: str, email: str, fone: str, senha: str):
 def cliente_listar() -> list:
     return Clientes.listar()
 
+def cliente_listar_id(id: int) -> Cliente:
+    for c in cliente_listar():
+        if c.id == id: return c
+    return None
+
 def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str):
     c = Cliente(id, nome, email, fone, senha)
     Clientes.atualizar(c)

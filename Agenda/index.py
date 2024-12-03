@@ -5,6 +5,7 @@ from ui.agenda_ui import AbrirAgendaUI
 from ui.conta_ui import AbrirContaUI
 from ui.login_ui import LoginUI
 from ui.listar_horario_ui import ListarHorarioUI
+from ui.atualizar_conta import AtualizarContaUI
 
 import view
 
@@ -39,8 +40,9 @@ class IndexUI:
         if op == "Abrir Agenda do Dia": AbrirAgendaUI.main()
 
     def menu_cliente():
-        op = st.sidebar.selectbox("Menu", ("Horários Disponíveis"))
+        op = st.sidebar.selectbox("Menu", ("Horários Disponíveis", "Atualizar conta"))
         if op == "Horários Disponíveis": ListarHorarioUI.main()
+        if op == "Atualizar conta": AtualizarContaUI.main()
 
     def sair():
         if st.sidebar.button("Sair do sistema"):
