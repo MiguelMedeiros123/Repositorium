@@ -6,7 +6,7 @@ from models.servicos import *
 
 def cliente_admin():
     for c in cliente_listar():
-        if c.nome == "admin": return
+        if c.get_nome() == "admin": return
     cliente_inserir("admin", "admin", "1234", "1234")
 
 def cliente_inserir(nome: str, email: str, fone: str, senha: str):
@@ -18,7 +18,7 @@ def cliente_listar() -> list:
 
 def cliente_listar_id(id: int) -> Cliente:
     for c in cliente_listar():
-        if c.id == id: return c
+        if c.get_id() == id: return c
     return None
 
 def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str):
@@ -31,8 +31,8 @@ def cliente_excluir(id: int):
 
 def cliente_autenticar(email: str, senha: str) -> dict:
     for c in cliente_listar():
-        if c.email == email and c.senha == senha:
-            return {"id": c.id, "nome": c.nome}
+        if c.get_email() == email and c.get_senha() == senha:
+            return {"id": c.get_id(), "nome": c.get_nome()}
     return None
 
 
@@ -46,7 +46,7 @@ def horario_listar() -> list:
 
 def horario_listar_id(id: int) -> Horario:
     for h in horario_listar():
-        if h.id == id: return h
+        if h.get_id() == id: return h
     return None
 
 def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
@@ -69,7 +69,7 @@ def horario_abrir_agenda(data: str, hora_inicio: str, hora_fim: str, intervalo: 
 def horario_disponivel_listar():
     horarios = []
     for h in horario_listar():
-        if h.data >= dt.datetime.now() and h.idCliente == 0: horarios.append(h)
+        if h.get_data() >= dt.datetime.now() and h.get_idCliente() == 0: horarios.append(h)
     return horarios
 
 

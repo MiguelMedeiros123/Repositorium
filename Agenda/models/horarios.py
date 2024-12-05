@@ -1,6 +1,6 @@
 import json
 import datetime as dt
-from crud import CRUD
+from models.crud import CRUD
 
 
 class Horario:

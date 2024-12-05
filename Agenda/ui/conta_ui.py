@@ -16,7 +16,7 @@ class AbrirContaUI:
             if email != "": e = True
             else: e = False
             for c in view.cliente_listar():
-                if c.email == email: e = False
+                if c.get_email() == email: e = False
             if e:
                 if len(senha) >= 3:
                     if senha == confirm:

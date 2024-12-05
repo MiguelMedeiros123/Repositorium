@@ -17,9 +17,9 @@ class ListarHorarioUI:
             ldata = []
             lconfirmado = []
             for h in horarios:
-                lid.append(h.id)
-                ldata.append(h.data)
-                lconfirmado.append(h.confirmado)     
+                lid.append(h.get_id())
+                ldata.append(h.get_data())
+                lconfirmado.append(h.get_confirmado())     
             dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado}
             graph = pd.DataFrame(dic)
             st.dataframe(graph, column_config = {"id": "ID", "data": "data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True)
@@ -28,7 +28,7 @@ class ListarHorarioUI:
                 hor = st.selectbox("Escolhe um horário para agendar", horarios)
                 ser = st.selectbox("Escolhe o serviço desejado", view.servico_listar())
                 if st.button("Agendar"):
-                    view.horario_atualizar(hor.id, hor.data, hor.confirmado, st.session_state["conta_id"], ser.id)
+                    view.horario_atualizar(hor.get_id(), hor.get_data(), hor.get_confirmado(), st.session_state["conta_id"], ser.get_id())
                     st.success("Horário agendado.")
                     time.sleep(2)
                     st.rerun()

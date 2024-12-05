@@ -1,5 +1,5 @@
 import json
-from crud import CRUD
+from models.crud import CRUD
 
 
 class Cliente:
@@ -12,6 +12,15 @@ class Cliente:
 
     def __str__(self):
         return f"{self.get_id()} - {self.get_nome()} - {self.get_email()} - Tel: {self.get_fone()}"
+
+    def to_json(self):
+        dic = {}
+        dic["id"] = self.get_id()
+        dic["nome"] = self.get_nome()
+        dic["email"] = self.get_email()
+        dic["fone"] = self.get_fone()
+        dic["senha"] = self.get_senha()
+        return dic
 
     def set_id(self, id):
         self.__id = id
@@ -38,7 +47,7 @@ class Clientes(CRUD):
     @classmethod
     def salvar(cls):  
         with open("Agenda/dados/clientes.json", mode = "w") as arquivo:
-            json.dump(cls.objetos, arquivo, default = vars) 
+            json.dump(cls.objetos, arquivo, default = Cliente.to_json) 
 
     @classmethod
     def abrir(cls):

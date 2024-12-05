@@ -25,10 +25,10 @@ class ManterClienteUI:
             lemail = []
             lfone = []
             for c in clientes:
-                lid.append(c.id)
-                lnome.append(c.nome)
-                lemail.append(c.email)
-                lfone.append(c.fone) 
+                lid.append(c.get_id())
+                lnome.append(c.get_nome())
+                lemail.append(c.get_email())
+                lfone.append(c.get_fone()) 
             dic = {"id": lid, "nome" : lnome, "email": lemail, "fone": lfone}
             graph = pd.DataFrame(dic)
             st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "email": "E-Mail", "fone": "Telefone"}, hide_index=True)
@@ -44,7 +44,7 @@ class ManterClienteUI:
             if email != "": e = True
             else: e = False
             for c in view.cliente_listar():
-                if c.email == email: e = False
+                if c.get_email() == email: e = False
             if e:
                 if len(senha) >= 3:
                     if senha == confirm:
@@ -63,20 +63,21 @@ class ManterClienteUI:
             st.write("Não há cliente cadastrado.")
         else:
             c = st.selectbox("Cliente a atualizar", clientes)
-            nome = st.text_input("Informa o novo nome", c.nome)
-            email = st.text_input("Informa o novo e-mail", c.email)
-            fone = st.text_input("Informa o novo fone", c.fone)
-            senha = st.text_input("Informa a nova senha", c.senha, type="password")
+            nome = st.text_input("Informa o novo nome", c.get_nome())
+            email = st.text_input("Informa o novo e-mail", c.get_email())
+            fone = st.text_input("Informa o novo fone", c.get_fone())
+            senha = st.text_input("Informa a nova senha", c.get_senha(), type="password")
             confirm = st.text_input("Confirmação da nova senha", type="password")
             if st.button("Atualizar"):
                 if email != "": e = True
                 else: e = False
-                for c in view.cliente_listar():
-                    if c.email == email: e = False
+                for cli in view.cliente_listar():
+                    if cli.get_email() == email:
+                        if cli.get_id() != c.get_id(): e = False
                 if e:
                     if len(senha) >= 3:
                         if senha == confirm:
-                            view.cliente_inserir(nome, email, fone, senha)
+                            view.cliente_atualizar(c.get_id(), nome, email, fone, senha)
                             st.success("Cliente atualizado com sucesso.")
                             time.sleep(2)
                             st.rerun()
@@ -92,7 +93,7 @@ class ManterClienteUI:
         else:
             c = st.selectbox("Cliente a excluir", clientes)
             if st.button("Excluir"):
-                view.cliente_excluir(c.id)
+                view.cliente_excluir(c.get_id())
                 st.success("Cliente excluído.")
                 time.sleep(2)
                 st.rerun()
