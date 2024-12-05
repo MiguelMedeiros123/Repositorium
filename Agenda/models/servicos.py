@@ -1,55 +1,18 @@
 import json
+from crud import CRUD
+
 
 class Servico:
     def __init__(self, id: int, descricao: str, valor: float, duracao: int):
-        self.id = id
-        self.descricao = descricao
-        self.valor = valor
-        self.duracao = duracao
+        self.set_id(id)
+        self.set_descricao(descricao)
+        self.set_valor(valor)
+        self.set_duracao(duracao)
+        
     def __str__(self):
-        return f"{self.id} - {self.descricao} - ${self.valor} - {self.duracao}min"
+        return f"{self.get_id()} - {self.get_descricao()} - ${self.get_valor()} - {self.get_duracao()}min"
 
-class Servicos:
-    objetos = []
-
-    @classmethod
-    def inserir(cls, obj):
-        cls.abrir()
-        m = 0
-        for n in cls.objetos:
-            if n.id > m: m = n.id
-        obj.id = m + 1
-        cls.objetos.append(obj)
-        cls.salvar()
-
-    @classmethod
-    def listar(cls):
-        cls.abrir()
-        return cls.objetos
-    
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
-        for n in cls.objetos:
-            if n.id == id: return n
-        return None
-    
-    @classmethod
-    def atualizar(cls, obj):
-        n = cls.listar_id(obj.id)
-        if n != None:
-            n.descricao = obj.descricao
-            n.valor = obj.valor
-            n.duracao = obj.duracao
-        cls.salvar()
-
-    @classmethod
-    def excluir(cls, obj):
-        n = cls.listar_id(obj.id)
-        if n != None:
-            cls.objetos.remove(n)
-        cls.salvar()
-
+class Servicos(CRUD):
     @classmethod
     def abrir(cls):
         cls.objetos = []

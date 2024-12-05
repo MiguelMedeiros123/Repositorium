@@ -48,7 +48,17 @@ class ManterHorarioUI:
                 
             dic = {"id": lid, "data" : ldata, "confirmado": lconfirmado, "cliente": lCliente, "servico": lServico}
             graph = pd.DataFrame(dic)
-            st.data_editor(graph, column_config = {"id": "ID", "data": "Data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True, disabled=("id", "data", "cliente", "servico"))
+            gd = st.data_editor(graph, column_config = {"id": "ID", "data": "Data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True, disabled=("id", "data", "cliente", "servico"))
+
+            if st.button("Atualizar confirmações"):
+                n = 0
+                for i in gd["id"]:
+                    hor = view.horario_listar_id(i)
+                    view.horario_atualizar(hor.id, hor.data, bool(gd.loc[n, "confirmado"]), hor.idCliente, hor.idServico)
+                    n += 1
+                st.success("Confirmações atualizadas.")
+                time.sleep(2)
+                st.rerun()
 
     @staticmethod
     def Inserir():

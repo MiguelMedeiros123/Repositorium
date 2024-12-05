@@ -1,57 +1,40 @@
 import json
+from crud import CRUD
+
 
 class Cliente:
     def __init__(self, id: int, nome: str, email: str, fone: str, senha: str):
-        self.id = id
-        self.nome = nome
-        self.email = email
-        self.fone = fone
-        self.senha = senha
+        self.set_id(id)
+        self.set_nome(nome)
+        self.set_email(email)
+        self.set_fone(fone)
+        self.set_senha(senha)
+
     def __str__(self):
-        return f"{self.id} - {self.nome} - {self.email} - Tel: {self.fone}"
+        return f"{self.get_id()} - {self.get_nome()} - {self.get_email()} - Tel: {self.get_fone()}"
+
+    def set_id(self, id):
+        self.__id = id
+    def get_id(self):
+        return self.__id
+    def set_nome(self, nome):
+        self.__nome = nome
+    def get_nome(self):
+        return self.__nome
+    def set_email(self, email):
+        self.__email = email
+    def get_email(self):
+        return self.__email
+    def set_fone(self, fone):
+        self.__fone = fone
+    def get_fone(self):
+        return self.__fone
+    def set_senha(self, senha):
+        self.__senha = senha
+    def get_senha(self):
+        return self.__senha
     
-class Clientes:
-    objetos = []
-
-    @classmethod
-    def inserir(cls, obj: Cliente):
-        cls.abrir()
-        m = 0
-        for c in cls.objetos:
-            if c.id > m: m = c.id
-        obj.id = m + 1  
-        cls.objetos.append(obj)
-        cls.salvar()
-
-    @classmethod
-    def listar(cls) -> list:
-        cls.abrir()
-        return cls.objetos
-    
-    @classmethod
-    def listar_id(cls, id: int) -> Cliente:
-        cls.abrir()
-        for c in cls.objetos:
-            if c.id == id: return c
-        return None
- 
-    @classmethod
-    def atualizar(cls, obj: Cliente):
-        c = cls.listar_id(obj.id)
-        if c != None:
-            c.nome = obj.nome
-            c.email = obj.email
-            c.fone = obj.fone
-            c.senha = obj.senha
-        cls.salvar()  
-
-    @classmethod
-    def excluir(cls, obj: Cliente):
-        c = cls.listar_id(obj.id)
-        if c != None: 
-            cls.objetos.remove(c)
-            cls.salvar()  
-
+class Clientes(CRUD):
     @classmethod
     def salvar(cls):  
         with open("Agenda/dados/clientes.json", mode = "w") as arquivo:

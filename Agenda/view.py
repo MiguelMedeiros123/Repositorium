@@ -44,6 +44,11 @@ def horario_inserir(data: dt.datetime, confirmado: bool, idCliente: int, idServi
 def horario_listar() -> list:
     return Horarios.listar()
 
+def horario_listar_id(id: int) -> Horario:
+    for h in horario_listar():
+        if h.id == id: return h
+    return None
+
 def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
     h = Horario(id, data, confirmado, idCliente, idServico)
     Horarios.atualizar(h)
