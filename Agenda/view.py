@@ -1,17 +1,30 @@
 from models.clientes import *
 from models.horarios import *
 from models.servicos import *
+from models.perfis import *
+from models.profissionais import *
 
 
+def autenticar(email: str, senha: str) -> dict:
+    for c in cliente_listar():
+        if c.get_email() == email and c.get_senha() == senha:
+            return {"id": c.get_id(), "nome": c.get_nome()}
+    for p in profissional_listar():
+        if p.get_email() == email and p.get_senha() == senha:
+            return {"id": p.get_id(), "nome": p.get_nome()}
+    return None
 
 def cliente_admin():
     for c in cliente_listar():
         if c.get_nome() == "admin": return
     cliente_inserir("admin", "admin", "1234", "1234")
 
+
 def cliente_inserir(nome: str, email: str, fone: str, senha: str):
     for cli in cliente_listar():
         if email == cli.get_email(): raise ValueError("E-mail informado já está em uso.")
+    for pro in profissional_listar():
+        if email == pro.get_email(): raise ValueError("E-mail informado já está em uso.")
     c = Cliente(0, nome, email, fone, senha)
     Clientes.inserir(c)
 
@@ -26,6 +39,8 @@ def cliente_listar_id(id: int) -> Cliente:
 def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str):
     for cli in cliente_listar():
         if id != cli.get_id() and email == cli.get_email(): raise ValueError("E-mail informado já está em uso.")
+    for pro in profissional_listar():
+        if email == pro.get_email(): raise ValueError("E-mail informado já está em uso.")
     c = Cliente(id, nome, email, fone, senha)
     Clientes.atualizar(c)
 
@@ -34,12 +49,6 @@ def cliente_excluir(id: int):
         if h.get_idCliente() == id: raise ValueError("Cliente informado possui horário marcado.")
     c = Cliente(id, "-", "-", "-", "-")
     Clientes.excluir(c)
-
-def cliente_autenticar(email: str, senha: str) -> dict:
-    for c in cliente_listar():
-        if c.get_email() == email and c.get_senha() == senha:
-            return {"id": c.get_id(), "nome": c.get_nome()}
-    return None
 
 
 
@@ -118,3 +127,59 @@ def servico_excluir(id: int):
         if h.get_idServico() == id: raise ValueError("Serviço informado é prestado em horário(s).")
     s = Servico(id, "-", 0, 0)
     Servicos.excluir(s)
+
+
+
+def profissional_inserir(nome: str, especialidade: str, conselho: str, email: str, senha: str):
+    for cli in cliente_listar():
+        if email == cli.get_email(): raise ValueError("E-mail informado já está em uso.")
+    for pro in profissional_listar():
+        if email == pro.get_email(): raise ValueError("E-mail informado já está em uso.")
+    p = Profissional(0, nome, especialidade, conselho, email, senha)
+    Profissionais.inserir(p)
+
+def profissional_listar() -> list:
+    return Profissionais.listar()
+
+def profissional_listar_id(id: int) -> Profissional:
+    for p in profissional_listar():
+        if p.get_id() == id: return p
+    return None
+
+def profissional_atualizar(id: int, nome: str, especialidade: str, conselho: str, email: str, senha: str):
+    for cli in cliente_listar():
+        if email == cli.get_email(): raise ValueError("E-mail informado já está em uso.")
+    for pro in profissional_listar():
+        if email == pro.get_email() and id != pro.get_id(): raise ValueError("E-mail informado já está em uso.")
+    p = Profissional(id, nome, especialidade, conselho, email, senha)
+    Profissionais.atualizar(p)
+
+def profissional_excluir(id: int):
+    for h in horario_listar():
+        if h.get_idProfissional() == id: raise ValueError("Profissional informado possui horário marcado.")
+    p = Profissional(id, "-", "-", "-", "-", "-")
+    Profissionais.excluir(p)
+
+
+
+def perfil_inserir(nome: str, descricao: str, beneficios: str):
+    p = Perfil(0, nome, descricao, beneficios)
+    Perfis.inserir(p)
+
+def perfil_listar() -> list:
+    return Perfis.listar()
+
+def perfil_listar_id(id: int) -> Perfil:
+    for p in perfil_listar():
+        if p.get_id() == id: return p
+    return None
+
+def perfil_atualizar(id: int, nome: str, descricao: str, beneficios: str):
+    p = Perfil(id, nome, descricao, beneficios)
+    Perfis.atualizar(p)
+
+def perfil_excluir(id: int):
+    for c in cliente_listar():
+        if c.get_idPerfil() == id: raise ValueError("Usuário(s) usa(m) o perfil indicado.")
+    p = Perfil(id, "-", "-", "-")
+    Perfis.excluir(p)

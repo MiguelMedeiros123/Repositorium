@@ -7,7 +7,7 @@ class LoginUI:
         email = st.text_input("Informa teu e-mail")
         senha = st.text_input("Informa tua senha", type="password")
         if st.button("Entrar"):
-            c = view.cliente_autenticar(email, senha)
+            c = view.autenticar(email, senha)
             if c == None: st.error("E-mail ou senha inválidos.")
             else:
                 st.session_state["conta_id"] = c["id"]

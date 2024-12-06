@@ -24,16 +24,19 @@ class Servico:
         self.__id = id
     def get_id(self):
         return self.__id
+    
     def set_descricao(self, descricao):
         if descricao == "": raise ValueError("Descrição inválida.")
         self.__descricao = descricao
     def get_descricao(self):
         return self.__descricao
+    
     def set_valor(self, valor):
         if valor < 0: raise ValueError("Valor inválido.")
         self.__valor = valor
     def get_valor(self):
         return self.__valor
+    
     def set_duracao(self, duracao):
         if duracao < 0: raise ValueError("Duração inválida.")
         self.__duracao = duracao
