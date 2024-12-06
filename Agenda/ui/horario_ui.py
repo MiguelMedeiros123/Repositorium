@@ -82,11 +82,14 @@ class ManterHorarioUI:
         else: idServico = s.get_id()
 
         if st.button("Inserir"):
-            data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
-            view.horario_inserir(data, confirmado, idCliente, idServico)
-            st.success("Horário inserido.")
-            time.sleep(2)
-            st.rerun()
+            try:
+                data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
+                view.horario_inserir(data, confirmado, idCliente, idServico)
+                st.success("Horário inserido.")
+                time.sleep(2)
+                st.rerun()
+            except Exception as erro:
+                st.error(erro)
 
     @staticmethod
     def Atualizar():
@@ -124,11 +127,14 @@ class ManterHorarioUI:
             else: idServico = s.get_id()
 
             if st.button("Atualizar"):
-                data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
-                view.horario_atualizar(h.get_id(), data, confirmado, idCliente, idServico)
-                st.success("Horário atualizado.")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
+                    view.horario_atualizar(h.get_id(), data, confirmado, idCliente, idServico)
+                    st.success("Horário atualizado.")
+                    time.sleep(2)
+                    st.rerun()
+                except Exception as erro:
+                    st.error(erro)
 
     @staticmethod
     def Excluir():
@@ -138,7 +144,10 @@ class ManterHorarioUI:
         else:
             h = st.selectbox("Horário a excluir", horarios)
             if st.button("Excluir"):
-                view.horario_excluir(h.get_id())
-                st.success("Horário excluído.")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    view.horario_excluir(h.get_id())
+                    st.success("Horário excluído.")
+                    time.sleep(2)
+                    st.rerun()
+                except Exception as erro:
+                    st.error(erro)

@@ -6,9 +6,7 @@ import time
 class ListarHorarioUI:
     def main():
         st.header("Horários disponíveis")
-        ListarHorarioUI.listar()
-    
-    def listar():
+        
         horarios = view.horario_disponivel_listar()
         if len(horarios) == 0:
             st.write("Nenhum horário dispoível.")
@@ -28,7 +26,10 @@ class ListarHorarioUI:
                 hor = st.selectbox("Escolhe um horário para agendar", horarios)
                 ser = st.selectbox("Escolhe o serviço desejado", view.servico_listar())
                 if st.button("Agendar"):
-                    view.horario_atualizar(hor.get_id(), hor.get_data(), hor.get_confirmado(), st.session_state["conta_id"], ser.get_id())
-                    st.success("Horário agendado.")
-                    time.sleep(2)
-                    st.rerun()
+                    try:
+                        view.horario_atualizar(hor.get_id(), hor.get_data(), hor.get_confirmado(), st.session_state["conta_id"], ser.get_id())
+                        st.success("Horário agendado.")
+                        time.sleep(2)
+                        st.rerun()
+                    except Exception as erro:
+                        st.error(erro)

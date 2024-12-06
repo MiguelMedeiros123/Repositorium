@@ -38,10 +38,13 @@ class ManterServicoUI:
         valor = st.text_input("Informa o valor")
         duracao = st.text_input("Informa a duração, em _min_")
         if st.button("Inserir"):
-            view.servico_inserir(descricao, float(valor), int(duracao))
-            st.success("Serviço inserido.")
-            time.sleep(2)
-            st.rerun()
+            try:
+                view.servico_inserir(descricao, float(valor), int(duracao))
+                st.success("Serviço inserido.")
+                time.sleep(2)
+                st.rerun()
+            except Exception as erro:
+                st.error(erro)
 
     @staticmethod
     def Atualizar():
@@ -54,10 +57,13 @@ class ManterServicoUI:
             valor = st.text_input("Informa o novo valor", s.get_valor())
             duracao = st.text_input("Informa a nova duração", s.get_duracao())
             if st.button("Atualizar"):
-                view.servico_atualizar(s.get_id(), descricao, float(valor), int(duracao))
-                st.success("Serviço atualizado.")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    view.servico_atualizar(s.get_id(), descricao, float(valor), int(duracao))
+                    st.success("Serviço atualizado.")
+                    time.sleep(2)
+                    st.rerun()
+                except Exception as erro:
+                    st.error(erro)
 
     @staticmethod
     def Excluir():
@@ -67,7 +73,10 @@ class ManterServicoUI:
         else:
             s = st.selectbox("Serviço a excluir", servicos)
             if st.button("Excluir"):
-                view.servico_excluir(s.get_id())
-                st.success("Serviço excluído.")
-                time.sleep(2)
-                st.rerun()
+                try: 
+                    view.servico_excluir(s.get_id())
+                    st.success("Serviço excluído.")
+                    time.sleep(2)
+                    st.rerun()
+                except Exception as erro:
+                    st.error(erro)

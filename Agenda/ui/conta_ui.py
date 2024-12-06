@@ -13,11 +13,7 @@ class AbrirContaUI:
         senha = st.text_input("Informa a tua senha", type="password")
         confirm = st.text_input("Confirmação da senha", type="password")
         if st.button("Abrir conta"):
-            if email != "": e = True
-            else: e = False
-            for c in view.cliente_listar():
-                if c.get_email() == email: e = False
-            if e:
+            try:
                 if len(senha) >= 3:
                     if senha == confirm:
                         view.cliente_inserir(nome, email, fone, senha)
@@ -26,4 +22,5 @@ class AbrirContaUI:
                         st.rerun()
                     else: st.error("A senha e sua confirmação devem ser iguais.")
                 else: st.error("Insere uma senha de, no mínimo, 3 caracteres.")
-            else: st.error("Insere um email válido que não esteja em uso.")
+            except Exception as erro:
+                st.error(erro)

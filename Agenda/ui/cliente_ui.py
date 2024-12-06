@@ -41,11 +41,7 @@ class ManterClienteUI:
         senha = st.text_input("Informa a senha", type="password")
         confirm = st.text_input("Confirmação da senha", type="password")
         if st.button("Inserir"):
-            if email != "": e = True
-            else: e = False
-            for c in view.cliente_listar():
-                if c.get_email() == email: e = False
-            if e:
+            try:
                 if len(senha) >= 3:
                     if senha == confirm:
                         view.cliente_inserir(nome, email, fone, senha)
@@ -54,7 +50,8 @@ class ManterClienteUI:
                         st.rerun()
                     else: st.error("A senha e sua confirmação devem ser iguais.")
                 else: st.error("Insere uma senha de, no mínimo, 3 caracteres.")
-            else: st.error("Insere um email válido que não esteja em uso.")
+            except Exception as erro:
+                st.error(erro)
 
     @staticmethod
     def Atualizar():
@@ -69,12 +66,7 @@ class ManterClienteUI:
             senha = st.text_input("Informa a nova senha", c.get_senha(), type="password")
             confirm = st.text_input("Confirmação da nova senha", type="password")
             if st.button("Atualizar"):
-                if email != "": e = True
-                else: e = False
-                for cli in view.cliente_listar():
-                    if cli.get_email() == email:
-                        if cli.get_id() != c.get_id(): e = False
-                if e:
+                try:
                     if len(senha) >= 3:
                         if senha == confirm:
                             view.cliente_atualizar(c.get_id(), nome, email, fone, senha)
@@ -83,7 +75,8 @@ class ManterClienteUI:
                             st.rerun()
                         else: st.error("A senha e sua confirmação devem ser iguais.")
                     else: st.error("Insere uma senha de, no mínimo, 3 caracteres.")
-                else: st.error("Insere um email válido que não esteja em uso.")
+                except Exception as erro:
+                    st.error(erro)
 
     @staticmethod
     def Excluir():
@@ -93,7 +86,10 @@ class ManterClienteUI:
         else:
             c = st.selectbox("Cliente a excluir", clientes)
             if st.button("Excluir"):
-                view.cliente_excluir(c.get_id())
-                st.success("Cliente excluído.")
-                time.sleep(2)
-                st.rerun()
+                try:
+                    view.cliente_excluir(c.get_id())
+                    st.success("Cliente excluído.")
+                    time.sleep(2)
+                    st.rerun()
+                except Exception as erro:
+                    st.error(erro)

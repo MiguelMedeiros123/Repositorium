@@ -13,7 +13,10 @@ class AbrirAgendaUI:
         horafim = st.text_input("Informa o início do último horário no formato _HH:MM_")
         intervalo = st.text_input("Informa o intervalo entre os horários em _min_")
         if st.button("Inserir horários"):
-            view.horario_abrir_agenda(dia, horain, horafim, int(intervalo))
-            st.success("Horários inseridos.")
-            time.sleep(2)
-            st.rerun()
+            try:
+                view.horario_abrir_agenda(dia, horain, horafim, int(intervalo))
+                st.success("Horário(s) inseridos.")
+                time.sleep(2)
+                st.rerun()
+            except Exception as erro:
+                st.error(erro)

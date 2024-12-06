@@ -27,18 +27,22 @@ class Cliente:
     def get_id(self):
         return self.__id
     def set_nome(self, nome):
+        if nome == "": raise ValueError("Nome inválido.")
         self.__nome = nome
     def get_nome(self):
         return self.__nome
     def set_email(self, email):
+        if email == "": raise ValueError("E-mail inválido.")
         self.__email = email
     def get_email(self):
         return self.__email
     def set_fone(self, fone):
+        if fone == "": raise ValueError("Telefone inválido.")
         self.__fone = fone
     def get_fone(self):
         return self.__fone
     def set_senha(self, senha):
+        if senha == "": raise ValueError("Senha inválida.")
         self.__senha = senha
     def get_senha(self):
         return self.__senha
