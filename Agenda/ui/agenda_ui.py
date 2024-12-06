@@ -5,9 +5,7 @@ import time
 class AbrirAgendaUI:
     def main():
         st.header("Abrir Agenda do Dia")
-        AbrirAgendaUI.AbrirAgenda()
-    
-    def AbrirAgenda():
+        
         dia = st.text_input("Informa o dia no formato _dd/mm/aaaa_")
         horain = st.text_input("Informa a hora de início no formato _HH:MM_")
         horafim = st.text_input("Informa o início do último horário no formato _HH:MM_")

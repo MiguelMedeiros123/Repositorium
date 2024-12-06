@@ -8,24 +8,24 @@ from models.profissionais import *
 def autenticar(email: str, senha: str) -> dict:
     for c in cliente_listar():
         if c.get_email() == email and c.get_senha() == senha:
-            return {"id": c.get_id(), "nome": c.get_nome()}
+            return {"id": c.get_id(), "nome": c.get_nome(), "tipo": "cliente"}
     for p in profissional_listar():
         if p.get_email() == email and p.get_senha() == senha:
-            return {"id": p.get_id(), "nome": p.get_nome()}
+            return {"id": p.get_id(), "nome": p.get_nome(), "tipo": "profissional"}
     return None
 
 def cliente_admin():
     for c in cliente_listar():
         if c.get_nome() == "admin": return
-    cliente_inserir("admin", "admin", "1234", "1234")
+    cliente_inserir("admin", "admin", "1234", "1234", 0)
 
 
-def cliente_inserir(nome: str, email: str, fone: str, senha: str):
+def cliente_inserir(nome: str, email: str, fone: str, senha: str, idPerfil: int):
     for cli in cliente_listar():
         if email == cli.get_email(): raise ValueError("E-mail informado já está em uso.")
     for pro in profissional_listar():
         if email == pro.get_email(): raise ValueError("E-mail informado já está em uso.")
-    c = Cliente(0, nome, email, fone, senha)
+    c = Cliente(0, nome, email, fone, senha, idPerfil)
     Clientes.inserir(c)
 
 def cliente_listar() -> list:
@@ -36,23 +36,23 @@ def cliente_listar_id(id: int) -> Cliente:
         if c.get_id() == id: return c
     return None
 
-def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str):
+def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str, idPerfil: int):
     for cli in cliente_listar():
         if id != cli.get_id() and email == cli.get_email(): raise ValueError("E-mail informado já está em uso.")
     for pro in profissional_listar():
         if email == pro.get_email(): raise ValueError("E-mail informado já está em uso.")
-    c = Cliente(id, nome, email, fone, senha)
+    c = Cliente(id, nome, email, fone, senha, idPerfil)
     Clientes.atualizar(c)
 
 def cliente_excluir(id: int):
     for h in horario_listar():
         if h.get_idCliente() == id: raise ValueError("Cliente informado possui horário marcado.")
-    c = Cliente(id, "-", "-", "-", "-")
+    c = Cliente(id, "-", "-", "-", "-", 0)
     Clientes.excluir(c)
 
 
 
-def horario_inserir(data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
+def horario_inserir(data: dt.datetime, confirmado: bool, idCliente: int, idServico: int, idProfissional: int):
     isc = False
     for c in cliente_listar():
         if c.get_id() == idCliente: isc = True
@@ -61,7 +61,11 @@ def horario_inserir(data: dt.datetime, confirmado: bool, idCliente: int, idServi
     for s in servico_listar():
         if s.get_id() == idServico: iss = True
     if not iss and idServico != 0: raise ValueError("ID do serviço informado não existe.")
-    h = Horario(0, data, confirmado, idCliente, idServico)
+    isp = False
+    for p in profissional_listar():
+        if p.get_id() == idProfissional: isp = True
+    if not isp and idProfissional != 0: raise ValueError("ID do serviço informado não existe.")
+    h = Horario(0, data, confirmado, idCliente, idServico, idProfissional)
     Horarios.inserir(h)
 
 def horario_listar() -> list:
@@ -72,7 +76,7 @@ def horario_listar_id(id: int) -> Horario:
         if h.get_id() == id: return h
     return None
 
-def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int):
+def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int, idProfissional: int):
     isc = False
     for c in cliente_listar():
         if c.get_id() == idCliente: isc = True
@@ -81,13 +85,17 @@ def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: i
     for s in servico_listar():
         if s.get_id() == idServico: iss = True
     if not iss and idServico != 0: raise ValueError("ID do serviço informado não existe.")
-    h = Horario(id, data, confirmado, idCliente, idServico)
+    isp = False
+    for p in profissional_listar():
+        if p.get_id() == idProfissional: isp = True
+    if not isp and idProfissional != 0: raise ValueError("ID do serviço informado não existe.")
+    h = Horario(id, data, confirmado, idCliente, idServico, idProfissional)
     Horarios.atualizar(h)
 
 def horario_excluir(id: int):
     for c in cliente_listar():
         if c.get_id() == horario_listar_id(id).get_idCliente(): raise ValueError("Horário informado está marcado para um cliente.")
-    h = Horario(id, "-", "-", "-", "-")
+    h = Horario(id, "-", "-", "-", "-", "-")
     Horarios.excluir(h)
 
 def horario_abrir_agenda(data: str, hora_inicio: str, hora_fim: str, intervalo: int):
@@ -99,15 +107,22 @@ def horario_abrir_agenda(data: str, hora_inicio: str, hora_fim: str, intervalo: 
     if delta.total_seconds() <= 0: raise ValueError("Intervalo entre horários é inválido") 
     
     while hora < horamax:
-        horario_inserir(hora, False, 0, 0)
+        horario_inserir(hora, False, 0, 0, 0)
         hora += delta
-    horario_inserir(horamax, False, 0, 0)
+    horario_inserir(horamax, False, 0, 0, 0)
 
 def horario_disponivel_listar():
     horarios = []
     for h in horario_listar():
         if h.get_data() >= dt.datetime.now() and h.get_idCliente() == 0: horarios.append(h)
     return horarios
+
+def horario_profissional_listar(id: int):
+    horarios = []
+    for h in horario_listar():
+        if h.get_idProfissional() == id: horarios.append(h)
+    return horarios
+
 
 
 
@@ -117,6 +132,11 @@ def servico_inserir(descricao: str, valor: float, duracao: int):
 
 def servico_listar() -> list:
     return Servicos.listar()
+
+def servico_listar_id(id: int) -> Servico:
+    for s in servico_listar():
+        if s.get_id() == id: return s
+    return None
 
 def servico_atualizar(id: int, descricao: str, valor: float, duracao: int):
     s = Servico(id, descricao, valor, duracao)

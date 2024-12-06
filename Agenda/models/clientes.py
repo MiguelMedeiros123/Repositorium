@@ -9,9 +9,10 @@ class Cliente:
         self.set_email(email)
         self.set_fone(fone)
         self.set_senha(senha)
+        self.set_idPerfil(idPerfil)
 
     def __str__(self):
-        return f"{self.get_id()} - {self.get_nome()} - {self.get_email()} - Tel: {self.get_fone()}"
+        return f"{self.get_id()} - {self.get_nome()} - {self.get_email()} - Tel: {self.get_fone()} - idPerfil: {self.get_idPerfil()}"
 
     def to_json(self):
         dic = {}
@@ -20,6 +21,7 @@ class Cliente:
         dic["email"] = self.get_email()
         dic["fone"] = self.get_fone()
         dic["senha"] = self.get_senha()
+        dic["idPerfil"] = self.get_idPerfil()
         return dic
 
     def set_id(self, id):
@@ -69,7 +71,7 @@ class Clientes(CRUD):
             with open("Agenda/dados/clientes.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Cliente(obj["id"], obj["nome"], obj["email"], obj["fone"], obj["senha"])
+                    n = Cliente(obj["id"], obj["nome"], obj["email"], obj["fone"], obj["senha"], obj["idPerfil"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass

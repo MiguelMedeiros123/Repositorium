@@ -24,27 +24,44 @@ class ManterClienteUI:
             lnome = []
             lemail = []
             lfone = []
+            lperfil = []
             for c in clientes:
                 lid.append(c.get_id())
                 lnome.append(c.get_nome())
                 lemail.append(c.get_email())
-                lfone.append(c.get_fone()) 
-            dic = {"id": lid, "nome" : lnome, "email": lemail, "fone": lfone}
+                lfone.append(c.get_fone())
+
+                bp = False
+                for p in view.perfil_listar():
+                    if p.get_id() == c.get_idPerfil():
+                        lperfil.append(p.get_nome())
+                        bp = True
+                        break
+                if bp == False: lperfil.append("Nenhum")
+
+            dic = {"id": lid, "nome" : lnome, "email": lemail, "fone": lfone, "perfil": lperfil}
             graph = pd.DataFrame(dic)
-            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "email": "E-Mail", "fone": "Telefone"}, hide_index=True)
+            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "email": "E-Mail", "fone": "Telefone", "perfil": "Perfil"}, hide_index=True)
 
     @staticmethod
     def Inserir():
         nome = st.text_input("Informa o nome")
         email = st.text_input("Informa o e-mail")
         fone = st.text_input("Informa o fone")
+        
+        lp = view.perfil_listar()
+        lp.insert(0, "Nenhum")
+        p = st.selectbox("Informa o perfil", lp)
+        if p == "Nenhum": idPerfil = 0
+        else: idPerfil = p.get_id()
+
         senha = st.text_input("Informa a senha", type="password")
         confirm = st.text_input("Confirmação da senha", type="password")
         if st.button("Inserir"):
             try:
                 if len(senha) >= 3:
                     if senha == confirm:
-                        view.cliente_inserir(nome, email, fone, senha)
+                        view.cliente_inserir(nome, email, fone, senha, idPerfil)
                         st.success("Cliente inserido com sucesso.")
                         time.sleep(2)
                         st.rerun()
@@ -63,13 +80,23 @@ class ManterClienteUI:
             nome = st.text_input("Informa o novo nome", c.get_nome())
             email = st.text_input("Informa o novo e-mail", c.get_email())
             fone = st.text_input("Informa o novo fone", c.get_fone())
+
+            lp = view.perfil_listar()
+            inp = 0
+            for p in lp:
+                if p.get_id() == c.get_idPerfil(): inp = lp.index(p) + 1
+            lp.insert(0, "Nenhum")
+            p = st.selectbox("Informa o novo perfil", lp, inp)
+            if p == "Nenhum": idPerfil = 0
+            else: idPerfil = p.get_id()
+            
             senha = st.text_input("Informa a nova senha", c.get_senha(), type="password")
             confirm = st.text_input("Confirmação da nova senha", type="password")
             if st.button("Atualizar"):
                 try:
                     if len(senha) >= 3:
                         if senha == confirm:
-                            view.cliente_atualizar(c.get_id(), nome, email, fone, senha)
+                            view.cliente_atualizar(c.get_id(), nome, email, fone, senha, idPerfil)
                             st.success("Cliente atualizado com sucesso.")
                             time.sleep(2)
                             st.rerun()

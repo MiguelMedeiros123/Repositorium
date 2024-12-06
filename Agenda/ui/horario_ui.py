@@ -25,6 +25,7 @@ class ManterHorarioUI:
             lconfirmado = []
             lCliente = []
             lServico = []
+            lProfissional = []
             for h in horarios:
                 lid.append(h.get_id())
                 ldata.append(h.get_data())
@@ -45,16 +46,24 @@ class ManterHorarioUI:
                         bs = True
                         break
                 if bs == False: lServico.append("Nenhum")
+
+                bp = False
+                for p in view.profissional_listar():
+                    if p.get_id() == h.get_idProfissional():
+                        lProfissional.append(p.get_nome())
+                        bp = True
+                        break
+                if bp == False: lProfissional.append("Nenhum")
                 
-            dic = {"id": lid, "data" : ldata, "confirmado": lconfirmado, "cliente": lCliente, "servico": lServico}
+            dic = {"id": lid, "data" : ldata, "confirmado": lconfirmado, "cliente": lCliente, "servico": lServico, "profissional": lProfissional}
             graph = pd.DataFrame(dic)
-            gd = st.data_editor(graph, column_config = {"id": "ID", "data": "Data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True, disabled=("id", "data", "cliente", "servico"))
+            gd = st.data_editor(graph, column_config = {"id": "ID", "data": "Data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço", "profissional": "Profissional"}, hide_index=True, disabled=("id", "data", "cliente", "servico", "profissional"))
 
             if st.button("Atualizar confirmações"):
                 n = 0
                 for i in gd["id"]:
                     hor = view.horario_listar_id(i)
-                    view.horario_atualizar(hor.get_id(), hor.get_data(), bool(gd.loc[n, "confirmado"]), hor.get_idCliente(), hor.get_idServico())
+                    view.horario_atualizar(hor.get_id(), hor.get_data(), bool(gd.loc[n, "confirmado"]), hor.get_idCliente(), hor.get_idServico(), hor.get_idProfissional())
                     n += 1
                 st.success("Confirmações atualizadas.")
                 time.sleep(2)
@@ -81,10 +90,16 @@ class ManterHorarioUI:
         if s == "Nenhum": idServico = 0
         else: idServico = s.get_id()
 
+        lp = view.profissional_listar()
+        lp.insert(0, "Nenhum")
+        p = st.selectbox("Profissional do horário", lp)
+        if p == "Nenhum": idProfissional = 0
+        else: idProfissional = p.get_id()
+
         if st.button("Inserir"):
             try:
                 data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
-                view.horario_inserir(data, confirmado, idCliente, idServico)
+                view.horario_inserir(data, confirmado, idCliente, idServico, idProfissional)
                 st.success("Horário inserido.")
                 time.sleep(2)
                 st.rerun()
@@ -126,10 +141,19 @@ class ManterHorarioUI:
             if s == "Nenhum": idServico = 0
             else: idServico = s.get_id()
 
+            lp = view.profissional_listar()
+            inp = 0
+            for p in lp:
+                if p.get_id() == h.get_idProfissional(): inp = lp.index(p) + 1
+            lp.insert(0, "Nenhum")
+            pro = st.selectbox("Novo profissional do horário", lp, inp)
+            if pro == "Nenhum": idProfissional = 0
+            else: idProfissional = pro.get_id()
+
             if st.button("Atualizar"):
                 try:
                     data = dt.datetime.strptime(f"{dia} {hora}", "%d/%m/%Y %H:%M")
-                    view.horario_atualizar(h.get_id(), data, confirmado, idCliente, idServico)
+                    view.horario_atualizar(h.get_id(), data, confirmado, idCliente, idServico, idProfissional)
                     st.success("Horário atualizado.")
                     time.sleep(2)
                     st.rerun()

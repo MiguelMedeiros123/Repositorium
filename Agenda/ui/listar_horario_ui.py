@@ -18,9 +18,9 @@ class ListarHorarioUI:
                 lid.append(h.get_id())
                 ldata.append(h.get_data())
                 lconfirmado.append(h.get_confirmado())     
-            dic = {"id": lid, "Data" : ldata, "confirmado": lconfirmado}
+            dic = {"id": lid, "data" : ldata, "confirmado": lconfirmado}
             graph = pd.DataFrame(dic)
-            st.dataframe(graph, column_config = {"id": "ID", "data": "data", "confirmado": "Confirmado", "cliente": "Cliente", "servico": "Serviço"}, hide_index=True)
+            st.dataframe(graph, column_config = {"id": "ID", "data": "Data", "confirmado": "Confirmado"}, hide_index=True)
 
             if st.session_state["conta_nome"] != "admin":
                 hor = st.selectbox("Escolhe um horário para agendar", horarios)
