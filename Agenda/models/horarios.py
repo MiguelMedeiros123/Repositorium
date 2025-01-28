@@ -13,7 +13,7 @@ class Horario:
         self.set_idProfissional(idProfissional)
 
     def __str__(self):
-        return f"{self.get_id()} - {dt.datetime.strftime(self.get_data(), "%d/%m/%Y %H:%M")}"
+        return f"{self.get_id()} - {dt.datetime.strftime(self.get_data(), '%d/%m/%Y %H:%M')}"
     
     def to_json(self):
         dic = {}
@@ -32,7 +32,7 @@ class Horario:
     
     def set_data(self, data):
         self.__data = data
-    def get_data(self):
+    def get_data(self) -> dt.datetime:
         return self.__data
     
     def set_confirmado(self, confirmado):
