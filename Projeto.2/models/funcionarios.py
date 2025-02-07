@@ -1,7 +1,4 @@
-import json
 import datetime as dt
-from models.crud import CRUD
-from models.setores import Setores
 
 
 class Funcionario:
@@ -18,10 +15,6 @@ class Funcionario:
 
     def __str__(self) -> str:
         return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.date.strftime(self.nasc, '%d/%m/%Y')}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.date.strftime(self.contr, '%d/%m/%Y')}; ID do setor: {self.id_setor}; ID da empresa: {self.id_empresa()}"
-    
-    def id_empresa(self) -> int:
-        if Setores.listar_id(self.id_setor) == None: return 0
-        else: return Setores.listar_id(self.id_setor).id_empresa
 
     def to_json(self):
         dic = {}
@@ -36,21 +29,47 @@ class Funcionario:
         dic["id_setor"] = self.id_setor
         return dic
 
+    def set_id(self, id):
+        self.__id = id
+    def get_id(self):
+        return self.__id
 
-class Funcionarios(CRUD):
-    @classmethod
-    def abrir(cls):
-        cls.objetos = []
-        try:
-            with open("Projeto.2/data/funcionarios.json", mode = "r") as arquivo:
-                texto = json.load(arquivo)
-                for obj in texto:
-                    f = Funcionario(obj["id"], obj["nome"], obj["ocup"], dt.datetime.strptime(obj["nasc"], "%d/%m/%Y").date(), obj["cpf"], obj["email"], obj["custo"], dt.datetime.strptime(obj["contr"], "%d/%m/%Y"), obj["id_setor"])
-                    cls.objetos.append(f)
-        except FileNotFoundError:
-            pass
+    def set_nome(self, nome):
+        self.__nome = nome
+    def get_nome(self):
+        return self.__nome
 
-    @classmethod
-    def salvar(cls):
-        with open("Projeto.2/data/funcionarios.json", mode = "w") as arquivo:
-            json.dump(cls.objetos, arquivo, default = Funcionario.to_json)
+    def set_ocup(self, ocup):
+        self.__ocup = ocup
+    def get_ocup(self):
+        return self.__ocup
+
+    def set_nasc(self, nasc):
+        self.__nasc = nasc
+    def get_nasc(self):
+        return self.__nasc
+
+    def set_cpf(self, cpf):
+        self.__cpf = cpf
+    def get_cpf(self):
+        return self.__cpf
+
+    def set_email(self, email):
+        self.__email = email
+    def get_email(self):
+        return self.__email
+
+    def set_custo(self, custo):
+        self.__custo = custo
+    def get_custo(self):
+        return self.__custo
+
+    def set_contr(self, contr):
+        self.__contr = contr
+    def get_contr(self):
+        return self.__contr
+
+    def set_id_setor(self, id_setor):
+        self.__id_setor = id_setor
+    def get_id_setor(self):
+        return self.__id_setor

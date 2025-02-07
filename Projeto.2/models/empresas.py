@@ -1,23 +1,14 @@
-import json
 import datetime as dt
-from models.crud import CRUD
-from models.setores import Setores
 
 
 class Empresa:
     def __init__(self, id: int, nome: str, desc: str, dono: str, fund: dt.date, setores: int):
-        self.id = id
-        self.nome = nome
-        self.desc = desc
-        self.dono = dono
-        self.fund = fund
-        self.setores = setores
-    
-    def custo(self) -> float:
-        custo = 0
-        for s in Setores.listar():
-            if s.id_empresa == self.id: custo += s.custo()
-        return custo
+        self.set_id(id)
+        self.set_nome(nome)
+        self.set_desc(desc)
+        self.set_dono(dono)
+        self.set_fund(fund)
+        self.set_setores(setores)
         
     def __str__(self) -> str:
         return f"{self.id} - {self.nome}; {self.desc}; Dono - {self.dono}; Fundada a {dt.date.strftime(self.fund, '%d/%m/%Y')}; N.º de setores: {self.setores}; Gasto mensal: {self.custo()}"
@@ -32,20 +23,32 @@ class Empresa:
         dic["setores"] = self.setores
         return dic
 
-class Empresas(CRUD):
-    @classmethod
-    def abrir(cls):
-        cls.objetos = []
-        try:
-            with open("Projeto.2/data/empresas.json", mode = "r") as arquivo:
-                texto = json.load(arquivo)
-                for obj in texto:
-                    e = Empresa(obj["id"], obj["nome"], obj["desc"], obj["dono"], dt.datetime.strptime(obj["fund"], "%d/%m/%Y").date(), obj["setores"])
-                    cls.objetos.append(e)
-        except FileNotFoundError:
-            pass
+    def set_id(self, id):
+        self.__id = id
+    def get_id(self):
+        return self.__id
 
-    @classmethod
-    def salvar(cls):
-        with open("Projeto.2/data/empresas.json", mode = "w") as arquivo:
-            json.dump(cls.objetos, arquivo, default = Empresa.to_json)
+    def set_nome(self, nome):
+        self.__nome = nome
+    def get_nome(self):
+        return self.__nome
+
+    def set_desc(self, desc):
+        self.__desc = desc
+    def get_desc(self):
+        return self.__desc
+
+    def set_dono(self, dono):
+        self.__dono = dono
+    def get_dono(self):
+        return self.__dono
+
+    def set_fund(self, fund):
+        self.__fund = fund
+    def get_fund(self):
+        return self.__fund
+
+    def set_setores(self, setores):
+        self.__setores = setores
+    def get_setores(self):
+        return self.__setores

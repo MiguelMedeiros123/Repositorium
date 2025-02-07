@@ -1,7 +1,6 @@
-from models.funcionarios import Funcionario, Funcionarios
-from models.setores import Setor, Setores
-from models.empresas import Empresa, Empresas
+from models.crud import Empresas, Setores, Funcionarios, Empresa, Setor, Funcionario
 import datetime as dt
+
 
 
 def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date):
@@ -10,6 +9,9 @@ def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: st
 
 def funcionario_listar():
     return Funcionarios.listar()
+
+def funcionario_listar_id(id: int) -> Funcionario:
+    return Funcionarios.listar_id(id)
 
 def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date):
     f = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, 0)
@@ -21,8 +23,11 @@ def funcionario_excluir(id: int):
 def funcionario_mover_setor(id_func: int, id_setor: int):
     Funcionarios.mover_setor(id_func, id_setor)
 
-def funcionario_listar_setor(id_setor: int):
-    return Funcionarios.listar_setor(id_setor)
+def funcionario_listar_empresa(id_func) -> int:
+    f = funcionario_listar_id(id_func)
+    s = setor_listar_id(f.get_id_setor())
+    if s == None: return 0
+    else: return s.get_id_empresa()
 
 def setor_inserir(nome: str, desc: str, data: dt.date):
     s = Setor(0, nome, desc, data, 0, 0)
@@ -31,7 +36,7 @@ def setor_inserir(nome: str, desc: str, data: dt.date):
 def setor_listar():
     return Setores.listar()
 
-def setor_listar_id(id: int):
+def setor_listar_id(id: int) -> Setor:
     return Setores.listar_id(id)
 
 def setor_atualizar(id: int, nome: str, desc: str, data: dt.date):
@@ -47,6 +52,13 @@ def setor_mover_empresa(id_setor: int, id_empresa: int):
 def setor_listar_empresa(id_empresa: int):
     return Setores.listar_empresa(id_empresa)
 
+def setor_custo(id: int) -> float:
+    c = 0
+    for f in funcionario_listar():
+        if f.get_id_setor() == id:
+            c += f.get_custo()
+    return c
+
 def empresa_inserir(nome: str, desc: str, dono: str, fund: dt.date):
     e = Empresa(0, nome, desc, dono, fund, 0)
     Empresas.inserir(e)
@@ -54,7 +66,7 @@ def empresa_inserir(nome: str, desc: str, dono: str, fund: dt.date):
 def empresa_listar():
     return Empresas.listar()
 
-def empresa_listar_id(id: int):
+def empresa_listar_id(id: int) -> Empresa:
     return Empresas.listar_id(id)
 
 def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date):
@@ -63,3 +75,10 @@ def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date):
 
 def empresa_excluir(id: int):
     Empresas.excluir(id)
+
+def empresa_custo(id: int) -> float:
+    c = 0
+    for s in setor_listar():
+        if s.get_id_empresa() == id:
+            c += setor_custo(s.get_id())
+    return c

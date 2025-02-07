@@ -32,9 +32,7 @@ def cliente_listar() -> list:
     return Clientes.listar()
 
 def cliente_listar_id(id: int) -> Cliente:
-    for c in cliente_listar():
-        if c.get_id() == id: return c
-    return None
+    Clientes.listar_id(id)
 
 def cliente_atualizar(id: int, nome: str, email: str, fone: str, senha: str, idPerfil: int):
     for cli in cliente_listar():
@@ -72,9 +70,7 @@ def horario_listar() -> list:
     return Horarios.listar()
 
 def horario_listar_id(id: int) -> Horario:
-    for h in horario_listar():
-        if h.get_id() == id: return h
-    return None
+    Horarios.listar_id(id)
 
 def horario_atualizar(id: int, data: dt.datetime, confirmado: bool, idCliente: int, idServico: int, idProfissional: int):
     isc = False
@@ -134,9 +130,7 @@ def servico_listar() -> list:
     return Servicos.listar()
 
 def servico_listar_id(id: int) -> Servico:
-    for s in servico_listar():
-        if s.get_id() == id: return s
-    return None
+    Servicos.listar_id(id)
 
 def servico_atualizar(id: int, descricao: str, valor: float, duracao: int):
     s = Servico(id, descricao, valor, duracao)
@@ -162,9 +156,7 @@ def profissional_listar() -> list:
     return Profissionais.listar()
 
 def profissional_listar_id(id: int) -> Profissional:
-    for p in profissional_listar():
-        if p.get_id() == id: return p
-    return None
+    Profissionais.listar_id(id)
 
 def profissional_atualizar(id: int, nome: str, especialidade: str, conselho: str, email: str, senha: str):
     for cli in cliente_listar():
@@ -190,9 +182,7 @@ def perfil_listar() -> list:
     return Perfis.listar()
 
 def perfil_listar_id(id: int) -> Perfil:
-    for p in perfil_listar():
-        if p.get_id() == id: return p
-    return None
+    Perfis.listar_id(id)
 
 def perfil_atualizar(id: int, nome: str, descricao: str, beneficios: str):
     p = Perfil(id, nome, descricao, beneficios)
