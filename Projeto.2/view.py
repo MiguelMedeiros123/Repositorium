@@ -18,7 +18,8 @@ def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int
     Funcionarios.atualizar(f)
 
 def funcionario_excluir(id: int):
-    Funcionarios.excluir(id)
+    f = Funcionario(id, "", "", "", "", "", "", "", "")
+    Funcionarios.excluir(f)
 
 def funcionario_mover_setor(id_func: int, id_setor: int):
     Funcionarios.mover_setor(id_func, id_setor)
@@ -44,7 +45,8 @@ def setor_atualizar(id: int, nome: str, desc: str, data: dt.date):
     Setores.atualizar(s)
 
 def setor_excluir(id: int):
-    Setores.excluir(id)
+    s = Setor(id, "", "", "", "", "")
+    Setores.excluir(s)
 
 def setor_mover_empresa(id_setor: int, id_empresa: int):
     Setores.mover_empresa(id_setor, id_empresa)
@@ -74,7 +76,8 @@ def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date):
     Empresas.atualizar(e)
 
 def empresa_excluir(id: int):
-    Empresas.excluir(id)
+    e = Empresa(id, "", "", "", "", "")
+    Empresas.excluir(e)
 
 def empresa_custo(id: int) -> float:
     c = 0

@@ -3,30 +3,30 @@ import datetime as dt
 
 class Funcionario:
     def __init__(self, id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date, id_setor: int) -> None:
-        self.id = id
-        self.nome = nome
-        self.ocup = ocup
-        self.nasc = nasc
-        self.cpf = cpf
-        self.email = email
-        self.custo = custo
-        self.contr = contr
-        self.id_setor = id_setor
+        self.set_id(id)
+        self.set_nome(nome)
+        self.set_ocup(ocup)
+        self.set_nasc(nasc)
+        self.set_cpf(cpf)
+        self.set_email(email)
+        self.set_custo(custo)
+        self.set_contr(contr)
+        self.set_id_setor(id_setor)
 
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome} - {self.ocup}; Nascimento - {dt.date.strftime(self.nasc, '%d/%m/%Y')}; CPF - {self.cpf}; E-mail - {self.email}; Custo mensal - {self.custo}; Data de contratação: {dt.date.strftime(self.contr, '%d/%m/%Y')}; ID do setor: {self.id_setor}; ID da empresa: {self.id_empresa()}"
+        return f"{self.get_id()} - {self.get_nome()} - {self.get_ocup()}; Nascimento - {dt.date.strftime(self.get_nasc(), '%d/%m/%Y')}; CPF - {self.get_cpf()}; E-mail - {self.get_email()}; Custo mensal - {self.get_custo()}; Data de contratação: {dt.date.strftime(self.get_contr(), '%d/%m/%Y')}; ID do setor: {self.get_id_setor()}"
 
     def to_json(self):
         dic = {}
-        dic["id"] = self.id
-        dic["nome"] = self.nome
-        dic["ocup"] = self.ocup
-        dic["nasc"] = dt.date.strftime(self.nasc, "%d/%m/%Y")
-        dic["cpf"] = self.cpf
-        dic["email"] = self.email
-        dic["custo"] = self.custo
-        dic["contr"] = dt.date.strftime(self.contr, "%d/%m/%Y")
-        dic["id_setor"] = self.id_setor
+        dic["id"] = self.get_id()
+        dic["nome"] = self.get_nome()
+        dic["ocup"] = self.get_ocup()
+        dic["nasc"] = dt.date.strftime(self.get_nasc(), "%d/%m/%Y")
+        dic["cpf"] = self.get_cpf()
+        dic["email"] = self.get_email()
+        dic["custo"] = self.get_custo()
+        dic["contr"] = dt.date.strftime(self.get_contr(), "%d/%m/%Y")
+        dic["id_setor"] = self.get_id_setor()
         return dic
 
     def set_id(self, id):

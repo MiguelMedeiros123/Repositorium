@@ -11,16 +11,16 @@ class Empresa:
         self.set_setores(setores)
         
     def __str__(self) -> str:
-        return f"{self.id} - {self.nome}; {self.desc}; Dono - {self.dono}; Fundada a {dt.date.strftime(self.fund, '%d/%m/%Y')}; N.º de setores: {self.setores}; Gasto mensal: {self.custo()}"
+        return f"{self.get_id()} - {self.get_nome()}; {self.get_desc()}; Dono - {self.get_dono()}; Fundada a {dt.date.strftime(self.get_fund(), '%d/%m/%Y')}; N.º de setores: {self.get_setores()}"
 
     def to_json(self):
         dic = {}
-        dic["id"] = self.id
-        dic["nome"] = self.nome
-        dic["desc"] = self.desc
-        dic["dono"] = self.dono
-        dic["fund"] = dt.date.strftime(self.fund, "%d/%m/%Y")
-        dic["setores"] = self.setores
+        dic["id"] = self.get_id()
+        dic["nome"] = self.get_nome()
+        dic["desc"] = self.get_desc()
+        dic["dono"] = self.get_dono()
+        dic["fund"] = dt.date.strftime(self.get_fund(), "%d/%m/%Y")
+        dic["setores"] = self.get_setores()
         return dic
 
     def set_id(self, id):
