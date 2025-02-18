@@ -2,11 +2,11 @@ import datetime as dt
 
 
 class Funcionario:
-    def __init__(self, id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date, id_setor: int) -> None:
+    def __init__(self, id: int, nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date, id_setor: int) -> None:
         self.set_id(id)
         self.set_nome(nome)
+        self.set_senha(senha)
         self.set_ocup(ocup)
-        self.set_nasc(nasc)
         self.set_cpf(cpf)
         self.set_email(email)
         self.set_custo(custo)
@@ -14,14 +14,14 @@ class Funcionario:
         self.set_id_setor(id_setor)
 
     def __str__(self) -> str:
-        return f"{self.get_id()} - {self.get_nome()} - {self.get_ocup()}; Nascimento - {dt.date.strftime(self.get_nasc(), '%d/%m/%Y')}; CPF - {self.get_cpf()}; E-mail - {self.get_email()}; Custo mensal - {self.get_custo()}; Data de contratação: {dt.date.strftime(self.get_contr(), '%d/%m/%Y')}; ID do setor: {self.get_id_setor()}"
+        return f"{self.get_id()} - {self.get_nome()} - {self.get_ocup()}; CPF - {self.get_cpf()}; E-mail - {self.get_email()}; Custo mensal - {self.get_custo()}; Data de contratação: {dt.date.strftime(self.get_contr(), '%d/%m/%Y')}; ID do setor: {self.get_id_setor()}"
 
     def to_json(self):
         dic = {}
         dic["id"] = self.get_id()
         dic["nome"] = self.get_nome()
+        dic["senha"] = self.get_senha()
         dic["ocup"] = self.get_ocup()
-        dic["nasc"] = dt.date.strftime(self.get_nasc(), "%d/%m/%Y")
         dic["cpf"] = self.get_cpf()
         dic["email"] = self.get_email()
         dic["custo"] = self.get_custo()
@@ -38,16 +38,16 @@ class Funcionario:
         self.__nome = nome
     def get_nome(self):
         return self.__nome
+    
+    def set_senha(self, senha):
+        self.__senha = senha
+    def get_senha(self):
+        return self.__senha
 
     def set_ocup(self, ocup):
         self.__ocup = ocup
     def get_ocup(self):
         return self.__ocup
-
-    def set_nasc(self, nasc):
-        self.__nasc = nasc
-    def get_nasc(self):
-        return self.__nasc
 
     def set_cpf(self, cpf):
         self.__cpf = cpf

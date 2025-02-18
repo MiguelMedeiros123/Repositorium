@@ -2,9 +2,22 @@ from models.crud import Empresas, Setores, Funcionarios, Empresa, Setor, Funcion
 import datetime as dt
 
 
+def in_admin():
+    i = False
+    for f in funcionario_listar():
+        if f.get_nome() == "admin": i = True
+    if not i:
+        funcionario_inserir("admin", "1234", "admin", "1234", "admin", 0, dt.date.today())
 
-def funcionario_inserir(nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date):
-    f = Funcionario(0, nome, ocup, nasc, cpf, email, custo, contr, 0)
+def autenticar(email: str, senha: str) -> dict:
+    for f in funcionario_listar():
+        if f.get_email() == email and f.get_senha() == senha:
+            return {"id": f.get_id(), "nome": f.get_nome(), "tipo": "cliente"}
+    return None
+
+
+def funcionario_inserir(nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date):
+    f = Funcionario(0, nome, senha, ocup, cpf, email, custo, contr, 0)
     Funcionarios.inserir(f)
 
 def funcionario_listar():
@@ -13,8 +26,8 @@ def funcionario_listar():
 def funcionario_listar_id(id: int) -> Funcionario:
     return Funcionarios.listar_id(id)
 
-def funcionario_atualizar(id: int, nome: str, ocup: str, nasc: dt.date, cpf: int, email: str, custo: float, contr: dt.date):
-    f = Funcionario(id, nome, ocup, nasc, cpf, email, custo, contr, 0)
+def funcionario_atualizar(id: int, nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date):
+    f = Funcionario(id, nome, senha, ocup, cpf, email, custo, contr, 0)
     Funcionarios.atualizar(f)
 
 def funcionario_excluir(id: int):

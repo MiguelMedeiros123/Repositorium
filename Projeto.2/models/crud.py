@@ -108,7 +108,7 @@ class Funcionarios(CRUD):
             with open("Projeto.2/data/funcionarios.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    f = Funcionario(obj["id"], obj["nome"], obj["ocup"], dt.datetime.strptime(obj["nasc"], "%d/%m/%Y").date(), obj["cpf"], obj["email"], obj["custo"], dt.datetime.strptime(obj["contr"], "%d/%m/%Y"), obj["id_setor"])
+                    f = Funcionario(obj["id"], obj["nome"], obj["senha"], obj["ocup"], obj["cpf"], obj["email"], obj["custo"], dt.datetime.strptime(obj["contr"], "%d/%m/%Y"), obj["id_setor"])
                     cls.objetos.append(f)
         except FileNotFoundError:
             pass
