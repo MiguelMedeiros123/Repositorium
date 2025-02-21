@@ -8,12 +8,13 @@ class ManterEmpresaUI:
     @staticmethod
     def main():
         st.header("Cadastro de funcionários")
-        listar, inserir, atualizar, excluir = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
+        listar, inserir, atualizar, excluir, setor = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir", "Mover setor"])
 
         with listar: ManterEmpresaUI.Listar()
         with inserir: ManterEmpresaUI.Inserir()
         with atualizar: ManterEmpresaUI.Atualizar()
         with excluir: ManterEmpresaUI.Excluir()
+        with setor: ManterEmpresaUI.Setor()
     
     @staticmethod
     def Listar():
@@ -92,3 +93,24 @@ class ManterEmpresaUI:
                     st.rerun()
                 except Exception as erro:
                     st.error(erro)
+
+    @staticmethod
+    def Setor():
+        empresas = view.empresa_listar()
+        setores = view.setor_listar()
+        if empresas == []:
+            st.write("Não há empresa cadastrada.")
+        else:
+            if setores == []:
+                st.write("Não há setor cadastrado.")
+            else:
+                s = st.selectbox("Setor a mover", setores)
+                e = st.selectbox("Empresa a mover", empresas)
+                if st.button("Mover"):
+                    try:
+                        view.setor_mover_empresa(e.get_id(), s.get_id())
+                        st.success("Setor movido à empresa.")
+                        time.sleep(2)
+                        st.rerun()
+                    except Exception as erro:
+                        st.error(erro)

@@ -1,1 +1,1 @@
-[{"id": 1, "nome": "admin", "senha": "1234", "ocup": "admin", "cpf": "1234", "email": "admin", "custo": 0, "contr": "21/02/2025", "id_setor": 0}]
+[{"id": 1, "nome": "admin", "senha": "1234", "ocup": "admin", "cpf": "1234", "email": "admin", "custo": 0, "contr": "21/02/2025", "id_setor": 2}, {"id": 2, "nome": "Teste", "senha": "123", "ocup": "Testeiro", "cpf": "12345", "email": "teste@email", "custo": 2500.0, "contr": "20/02/2025", "id_setor": 0}]

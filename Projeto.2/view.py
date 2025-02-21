@@ -27,8 +27,9 @@ def funcionario_listar_id(id: int) -> Funcionario:
     return Funcionarios.listar_id(id)
 
 def funcionario_atualizar(id: int, nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date):
-    f = Funcionario(id, nome, senha, ocup, cpf, email, custo, contr, 0)
-    Funcionarios.atualizar(f)
+    fv = funcionario_listar_id(id)
+    fn = Funcionario(id, nome, senha, ocup, cpf, email, custo, contr, fv.get_id_setor())
+    Funcionarios.atualizar(fn)
 
 def funcionario_excluir(id: int):
     f = Funcionario(id, "", "", "", "", "", "", "", "")
@@ -42,6 +43,11 @@ def funcionario_listar_empresa(id_func) -> int:
     s = setor_listar_id(f.get_id_setor())
     if s == None: return 0
     else: return s.get_id_empresa()
+
+
+def funcionario_mover_setor(id_setor: int, id_func: int):
+    Setores.mover_func(id_setor, id_func)
+
 
 def setor_inserir(nome: str, desc: str, data: dt.date):
     s = Setor(0, nome, desc, data, 0, 0)
@@ -73,6 +79,11 @@ def setor_custo(id: int) -> float:
         if f.get_id_setor() == id:
             c += f.get_custo()
     return c
+
+
+def setor_mover_empresa(id_empresa: int, id_setor: int):
+    Empresas.mover_setor(id_empresa, id_setor)
+
 
 def empresa_inserir(nome: str, desc: str, dono: str, fund: dt.date):
     e = Empresa(0, nome, desc, dono, fund, 0)

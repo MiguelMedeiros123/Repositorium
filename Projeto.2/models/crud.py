@@ -61,6 +61,25 @@ class CRUD(ABC):
 
 class Empresas(CRUD):
     @classmethod
+    def mover_setor(cls, id_empresa: int, id_setor: int):
+        ef = cls.listar_id(id_empresa)
+        if ef != None:
+            s = Setores.listar_id(id_setor)
+            if s != None:
+                if 
+                ei = cls.listar_id(s.get_id_empresa())
+                if ei != None:
+                    if ei.get_id() != ef.get_id():
+                        ei.set_setores(ei.get_setores()-1)
+                        cls.atualizar(ei)
+                        ef.set_funcionarios(ef.get_funcionarios()+1)
+                        s.set_id_empresa(id_empresa)
+                        cls.atualizar(ef)
+                        Funcionarios.atualizar(s)
+                    else:
+                        raise Exception("Setor não pode ser movido à empresa em que já está.")
+    
+    @classmethod
     def abrir(cls):
         cls.objetos = []
         try:
@@ -80,6 +99,24 @@ class Empresas(CRUD):
 
 
 class Setores(CRUD):
+    @classmethod
+    def mover_func(cls, id_setor: int, id_func: int):
+        sf = cls.listar_id(id_setor)
+        if sf != None:
+            f = Funcionarios.listar_id(id_func)
+            if f != None:
+                si = cls.listar_id(f.get_id_setor())
+                if si.get_id() != sf.get_id():
+                    if si != None:
+                        si.set_funcionarios(si.get_funcionarios()-1)
+                        cls.atualizar(si)
+                    sf.set_funcionarios(sf.get_funcionarios()+1)
+                    f.set_id_setor(id_setor)
+                    cls.atualizar(sf)
+                    Funcionarios.atualizar(f)
+                else:
+                    raise Exception("Funcionário não pode ser movido ao setor em que já está.")
+
     @classmethod
     def abrir(cls):
         cls.objetos = []
