@@ -1,5 +1,8 @@
 from ui.conta_ui import AbrirContaUI
 from ui.login_ui import LoginUI
+from ui.funcionario_ui import ManterFuncionarioUI
+from ui.setor_ui import ManterSetorUI
+from ui.empresa_ui import ManterEmpresaUI
 
 import view
 
@@ -27,7 +30,10 @@ class IndexUI:
         if op == "Abrir conta": AbrirContaUI.main()
 
     def menu_admin():
-       st.write("Olá, admin! Faz o site logo!")
+        op = st.sidebar.selectbox("Menu", ("Cadastro de funcionários", "Cadastro de setores", "Cadastro de empresas"))
+        if op == "Cadastro de funcionários": ManterFuncionarioUI.main()
+        if op == "Cadastro de setores": ManterSetorUI.main()
+        if op == "Cadastro de empresas": ManterEmpresaUI.main()
 
     def menu_funcionario():
         st.write("Olá, funcionário! O site ainda está em produção.")

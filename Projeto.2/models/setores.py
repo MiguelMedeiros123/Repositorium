@@ -1,5 +1,6 @@
 import datetime as dt
 
+
 class Setor:
     def __init__(self, id: int, nome: str, desc: str, data: dt.date, funcionarios: int, id_empresa: int) -> None:
         self.set_id(id)

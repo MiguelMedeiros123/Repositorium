@@ -1,1 +1,1 @@
-[{"id": 1, "nome": "Administrativo", "desc": "Administra a companhia", "data": "25/09/1920", "funcionarios": 1, "id_empresa": 1}, {"id": 2, "nome": "Jur\u00eddico", "desc": "Setor jur\u00eddico da empresa", "data": "11/11/1921", "funcionarios": 2, "id_empresa": 1}]
+[{"id": 1, "nome": "Teste", "desc": "Setor de teste", "data": "10/10/2010", "funcionarios": 0, "id_empresa": 0}]

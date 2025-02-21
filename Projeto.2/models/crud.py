@@ -94,7 +94,7 @@ class Setores(CRUD):
 
     @classmethod
     def salvar(cls):
-        with open("Projeto/setores.json", mode = "w") as arquivo:
+        with open("Projeto.2/data/setores.json", mode = "w") as arquivo:
             json.dump(cls.objetos, arquivo, default = Setor.to_json)
 
 
