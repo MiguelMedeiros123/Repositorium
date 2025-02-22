@@ -2,6 +2,7 @@ from models.crud import Empresas, Setores, Funcionarios, Empresa, Setor, Funcion
 import datetime as dt
 
 
+
 def in_admin():
     i = False
     for f in funcionario_listar():
@@ -12,8 +13,9 @@ def in_admin():
 def autenticar(email: str, senha: str) -> dict:
     for f in funcionario_listar():
         if f.get_email() == email and f.get_senha() == senha:
-            return {"id": f.get_id(), "nome": f.get_nome(), "tipo": "cliente"}
+            return {"id": f.get_id(), "nome": f.get_nome()}
     return None
+
 
 
 def funcionario_inserir(nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date):
@@ -35,9 +37,6 @@ def funcionario_excluir(id: int):
     f = Funcionario(id, "", "", "", "", "", "", "", "")
     Funcionarios.excluir(f)
 
-def funcionario_mover_setor(id_func: int, id_setor: int):
-    Funcionarios.mover_setor(id_func, id_setor)
-
 def funcionario_listar_empresa(id_func) -> int:
     f = funcionario_listar_id(id_func)
     s = setor_listar_id(f.get_id_setor())
@@ -45,8 +44,10 @@ def funcionario_listar_empresa(id_func) -> int:
     else: return s.get_id_empresa()
 
 
+
 def funcionario_mover_setor(id_setor: int, id_func: int):
     Setores.mover_func(id_setor, id_func)
+
 
 
 def setor_inserir(nome: str, desc: str, data: dt.date):
@@ -60,8 +61,9 @@ def setor_listar_id(id: int) -> Setor:
     return Setores.listar_id(id)
 
 def setor_atualizar(id: int, nome: str, desc: str, data: dt.date):
-    s = Setor(id, nome, desc, data, 0, 0)
-    Setores.atualizar(s)
+    sv = setor_listar_id(id)
+    sn = Setor(id, nome, desc, data, sv.get_funcionarios(), sv.get_id_empresa())
+    Setores.atualizar(sn)
 
 def setor_excluir(id: int):
     s = Setor(id, "", "", "", "", "")
@@ -81,8 +83,10 @@ def setor_custo(id: int) -> float:
     return c
 
 
+
 def setor_mover_empresa(id_empresa: int, id_setor: int):
     Empresas.mover_setor(id_empresa, id_setor)
+
 
 
 def empresa_inserir(nome: str, desc: str, dono: str, fund: dt.date):

@@ -66,18 +66,23 @@ class Empresas(CRUD):
         if ef != None:
             s = Setores.listar_id(id_setor)
             if s != None:
-                if 
                 ei = cls.listar_id(s.get_id_empresa())
                 if ei != None:
                     if ei.get_id() != ef.get_id():
                         ei.set_setores(ei.get_setores()-1)
                         cls.atualizar(ei)
-                        ef.set_funcionarios(ef.get_funcionarios()+1)
+                        ef.set_setores(ef.get_setores()+1)
                         s.set_id_empresa(id_empresa)
                         cls.atualizar(ef)
-                        Funcionarios.atualizar(s)
-                    else:
-                        raise Exception("Setor não pode ser movido à empresa em que já está.")
+                        Setores.atualizar(s)
+                    else: raise Exception("Setor não pode ser movido à empresa em que já está.")
+                else:
+                    ef.set_setores(ef.get_setores()+1)
+                    s.set_id_empresa(id_empresa)
+                    cls.atualizar(ef)
+                    Setores.atualizar(s)
+            else: raise Exception("Setor informado não existe.")
+        else: raise Exception("Empresa informada não existe.")
     
     @classmethod
     def abrir(cls):
