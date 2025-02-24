@@ -2,13 +2,14 @@ import datetime as dt
 
 
 class Setor:
-    def __init__(self, id: int, nome: str, desc: str, data: dt.date, funcionarios: int, id_empresa: int) -> None:
+    def __init__(self, id: int, nome: str, desc: str, data: dt.date, funcionarios: int, id_empresa: int, custo_add: float) -> None:
         self.set_id(id)
         self.set_nome(nome)
         self.set_desc(desc)
         self.set_data(data)
         self.set_funcionarios(funcionarios)
         self.set_id_empresa(id_empresa)
+        self.set_custo_add(custo_add)
 
     def __str__(self) -> str:
         return f"{self.get_id()} - {self.get_nome()}; {self.get_desc()}; Criado a {dt.date.strftime(self.get_data(), '%d/%m/%Y')}; N.º de funcionários - {self.get_funcionarios()}; ID da empresa - {self.get_id_empresa()}"
@@ -21,6 +22,7 @@ class Setor:
         dic["data"] = dt.date.strftime(self.get_data(), "%d/%m/%Y")
         dic["funcionarios"] = self.get_funcionarios()
         dic["id_empresa"] = self.get_id_empresa()
+        dic["custo_add"] = self.get_custo_add()
         return dic
     
     def set_id(self, id):
@@ -52,3 +54,8 @@ class Setor:
         self.__id_empresa = id_empresa
     def get_id_empresa(self):
         return self.__id_empresa
+    
+    def set_custo_add(self, custo_add):
+        self.__custo_add = custo_add
+    def get_custo_add(self):
+        return self.__custo_add

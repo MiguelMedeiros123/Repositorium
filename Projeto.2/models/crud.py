@@ -91,7 +91,7 @@ class Empresas(CRUD):
             with open("Projeto.2/data/empresas.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    e = Empresa(obj["id"], obj["nome"], obj["desc"], obj["dono"], dt.datetime.strptime(obj["fund"], "%d/%m/%Y").date(), obj["setores"])
+                    e = Empresa(obj["id"], obj["nome"], obj["desc"], obj["dono"], dt.datetime.strptime(obj["fund"], "%d/%m/%Y").date(), obj["setores"], obj["custo_add"])
                     cls.objetos.append(e)
         except FileNotFoundError:
             pass
@@ -129,7 +129,7 @@ class Setores(CRUD):
             with open("Projeto.2/data/setores.json", mode = "r") as arquivo:
                 texto = json.load(arquivo)
                 for obj in texto:
-                    n = Setor(obj["id"], obj["nome"], obj["desc"], dt.datetime.strptime(obj["data"], "%d/%m/%Y").date(), obj["funcionarios"], obj["id_empresa"])
+                    n = Setor(obj["id"], obj["nome"], obj["desc"], dt.datetime.strptime(obj["data"], "%d/%m/%Y").date(), obj["funcionarios"], obj["id_empresa"], obj["custo_add"])
                     cls.objetos.append(n)
         except FileNotFoundError:
             pass

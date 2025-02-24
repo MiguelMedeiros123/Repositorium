@@ -2,13 +2,14 @@ import datetime as dt
 
 
 class Empresa:
-    def __init__(self, id: int, nome: str, desc: str, dono: str, fund: dt.date, setores: int):
+    def __init__(self, id: int, nome: str, desc: str, dono: str, fund: dt.date, setores: int, custo_add: float):
         self.set_id(id)
         self.set_nome(nome)
         self.set_desc(desc)
         self.set_dono(dono)
         self.set_fund(fund)
         self.set_setores(setores)
+        self.set_custo_add(custo_add)
         
     def __str__(self) -> str:
         return f"{self.get_id()} - {self.get_nome()}; {self.get_desc()}; Dono - {self.get_dono()}; Fundada a {dt.date.strftime(self.get_fund(), '%d/%m/%Y')}; N.º de setores: {self.get_setores()}"
@@ -21,6 +22,7 @@ class Empresa:
         dic["dono"] = self.get_dono()
         dic["fund"] = dt.date.strftime(self.get_fund(), "%d/%m/%Y")
         dic["setores"] = self.get_setores()
+        dic["custo_add"] = self.get_custo_add()
         return dic
 
     def set_id(self, id):
@@ -52,3 +54,8 @@ class Empresa:
         self.__setores = setores
     def get_setores(self):
         return self.__setores
+    
+    def set_custo_add(self, custo_add):
+        self.__custo_add = custo_add
+    def get_custo_add(self):
+        return self.__custo_add
