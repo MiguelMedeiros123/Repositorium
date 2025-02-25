@@ -64,13 +64,25 @@ def funcionario_busca(nome: str, ocup: str):
                     ft.remove(f)
                     break
         fun = ft
-    return fun
-            
+    return fun            
 
 
 
 def funcionario_mover_setor(id_setor: int, id_func: int):
     Setores.mover_func(id_setor, id_func)
+
+def multi_funcionario_mover_setor(ocup: str, id_setor_inicial: int, id_setor_final: int):
+    fun = funcionario_listar()
+    if ocup != "":
+        fun = funcionario_busca("", ocup)
+    ft = fun.copy()
+    for f in fun:
+        if f.get_id_setor() != id_setor_inicial: ft.remove(f)
+    for f in ft:
+        funcionario_mover_setor(id_setor_final, f.get_id())
+
+def multi_funcionario_mover_setor(ocup: str, id_setor_inicial: int, id_setor_final: int):
+    
 
 
 
@@ -90,7 +102,7 @@ def setor_atualizar(id: int, nome: str, desc: str, data: dt.date, custo_add: flo
     Setores.atualizar(sn)
 
 def setor_excluir(id: int):
-    s = Setor(id, "", "", "", "", "")
+    s = Setor(id, "", "", "", "", "", "")
     Setores.excluir(s)
 
 def setor_mover_empresa(id_setor: int, id_empresa: int):
@@ -106,10 +118,21 @@ def setor_custo(id: int) -> float:
             c += f.get_custo()
     return c
 
+def setor_reajuste_salarial(id_setor: int, percentual: float):
+    for f in funcionario_listar():
+        if f.get_id_setor() == id_setor:
+            nc = f.get_custo()*percentual/100
+            funcionario_atualizar(f.get_id(), f.get_nome(), f.get_senha(), f.get_ocup(), f.get_cpf(), f.get_email(), nc, f.get_contr())
+
 
 
 def setor_mover_empresa(id_empresa: int, id_setor: int):
     Empresas.mover_setor(id_empresa, id_setor)
+
+def multi_setor_mover_empresa(id_empresa_inicial: int, id_empresa_final: int):
+    for s in setor_listar():
+        if s.get_id_empresa() == id_empresa_inicial:
+            setor_mover_empresa(id_empresa_final, s.get_id())
 
 
 
@@ -129,8 +152,20 @@ def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date, c
     Empresas.atualizar(en)
 
 def empresa_excluir(id: int):
-    e = Empresa(id, "", "", "", "", "")
+    e = Empresa(id, "", "", "", "", "", "")
     Empresas.excluir(e)
+
+def empresa_reajuste_gastos(id_empresa: int, percentual: float):
+    for s in setor_listar():
+        if s.get_id_empresa() == id_empresa:
+            ngasto = s.get_custo_add()*percentual/100
+            setor_atualizar(s.get_id(), s.get_nome(), s.get_desc(), s.get_data(), ngasto)
+
+def empresa_reajuste_salarial(id_empresa: int, percentual: float):
+    for s in setor_listar():
+        if s.get_id_empresa() == id_empresa:
+            setor_reajuste_salarial(s.get_id(), percentual)
+                    
 
 def empresa_custo(id: int) -> float:
     c = empresa_listar_id(id).get_custo_add()
