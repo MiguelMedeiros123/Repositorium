@@ -81,9 +81,6 @@ def multi_funcionario_mover_setor(ocup: str, id_setor_inicial: int, id_setor_fin
     for f in ft:
         funcionario_mover_setor(id_setor_final, f.get_id())
 
-def multi_funcionario_mover_setor(ocup: str, id_setor_inicial: int, id_setor_final: int):
-    
-
 
 
 def setor_inserir(nome: str, desc: str, data: dt.date, custo_add: float):
@@ -104,12 +101,6 @@ def setor_atualizar(id: int, nome: str, desc: str, data: dt.date, custo_add: flo
 def setor_excluir(id: int):
     s = Setor(id, "", "", "", "", "", "")
     Setores.excluir(s)
-
-def setor_mover_empresa(id_setor: int, id_empresa: int):
-    Setores.mover_empresa(id_setor, id_empresa)
-
-def setor_listar_empresa(id_empresa: int):
-    return Setores.listar_empresa(id_empresa)
 
 def setor_custo(id: int) -> float:
     c = setor_listar_id(id).get_custo_add()
