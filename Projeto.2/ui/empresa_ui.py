@@ -49,7 +49,7 @@ class ManterEmpresaUI:
         desc = st.text_input("Informa a descrição")
         dono = st.text_input("Informa o dono")
         fund = st.text_input("Informa a data de fundação (formato dd/mm/aaaa)")
-        custo_add = st.text_input("Informa um custo adicional (além dos setores e funcionários)")
+        custo_add = st.text_input("Informa um custo mensal adicional (além dos setores e funcionários)")
         if st.button("Inserir"):
             try:
                 view.empresa_inserir(nome, desc, dono, dt.datetime.strptime(fund, "%d/%m/%Y").date(), float(custo_add))
@@ -70,7 +70,7 @@ class ManterEmpresaUI:
             desc = st.text_input("Informa a nova descrição", e.get_desc())
             dono = st.text_input("Informa o novo dono", e.get_dono())
             fund = st.text_input("Informa a nova data de fundação (formato dd/mm/aaaa)", dt.date.strftime(e.get_fund(), "%d/%m/%Y"))
-            custo_add = st.text_input("Informa o novo custo adicional (além dos setores e funcionários)", e.get_custo_add())
+            custo_add = st.text_input("Informa o novo custo mensal adicional (além dos setores e funcionários)", e.get_custo_add())
             if st.button("Atualizar"):
                 try:
                     view.empresa_atualizar(e.get_id(), nome, desc, dono, dt.datetime.strptime(fund, "%d/%m/%Y").date(), float(custo_add))

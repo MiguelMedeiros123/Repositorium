@@ -38,7 +38,8 @@ def funcionario_excluir(id: int):
     Funcionarios.excluir(f)
 
 def funcionario_listar_empresa(id_func: int) -> int:
-    s = setor_listar_id(funcionario_listar_id(id_func).get_id_setor())
+    f = funcionario_listar_id(id_func)
+    s = setor_listar_id(f.get_id_setor())
     if s == None: return 0
     else: return s.get_id_empresa()
 
@@ -51,7 +52,7 @@ def funcionario_busca(nome: str, ocup: str):
         for f in fun:
             nf = list(f.get_nome())
             for i in range(0, len(n)):
-                if n[i] != nf[i]:
+                if n[i].upper() != nf[i].upper():
                     ft.remove(f)
                     break
         fun = ft
@@ -60,7 +61,7 @@ def funcionario_busca(nome: str, ocup: str):
         for f in fun:
             of = list(f.get_ocup())
             for i in range(0, len(o)):
-                if o[i] != of[i]:
+                if o[i].upper() != of[i].upper():
                     ft.remove(f)
                     break
         fun = ft
@@ -116,11 +117,10 @@ def setor_custo(id: int) -> float:
             c += f.get_custo()
     return c
 
-def setor_reajuste_salarial(id_setor: int, percentual: float):
-    for f in funcionario_listar():
-        if f.get_id_setor() == id_setor:
-            nc = f.get_custo()*percentual/100
-            funcionario_atualizar(f.get_id(), f.get_nome(), f.get_senha(), f.get_ocup(), f.get_cpf(), f.get_email(), nc, f.get_contr())
+def setor_reajuste_salarial(id_setor: int, percentual: float): 
+    for f in setor_funcionarios(id_setor):
+        nc = f.get_custo()*(100 - percentual)/100
+        funcionario_atualizar(f.get_id(), f.get_nome(), f.get_senha(), f.get_ocup(), f.get_cpf(), f.get_email(), nc, f.get_contr())
 
 
 
@@ -162,13 +162,13 @@ def empresa_setores(id_empresa: int):
 def empresa_reajuste_gastos(id_empresa: int, percentual: float):
     for s in setor_listar():
         if s.get_id_empresa() == id_empresa:
-            ngasto = s.get_custo_add()*percentual/100
+            ngasto = s.get_custo_add()*(100 + percentual)/100
+            if ngasto < 0: ngasto = 0
             setor_atualizar(s.get_id(), s.get_nome(), s.get_desc(), s.get_data(), ngasto)
 
 def empresa_reajuste_salarial(id_empresa: int, percentual: float):
-    for s in setor_listar():
-        if s.get_id_empresa() == id_empresa:
-            setor_reajuste_salarial(s.get_id(), percentual)
+    for s in empresa_setores(id_empresa):
+        setor_reajuste_salarial(s.get_id(), percentual)
                     
 
 def empresa_custo(id: int) -> float:

@@ -77,55 +77,106 @@ class VerEmpresaUI:
                 st.write("O administrador deve inserir-te no sistema da empresa.")
             else:
                 st.subheader("Funcionários da empresa")
-                setores = view.empresa_setores(e.get_id())
                 funcionarios = []
-                for s in setores:
-                    for f in view.setor_funcionarios(s.get_id()):
-                        funcionarios.append(f)
-                if funcionarios == []: st.write("Não há funcionários cadastrados na empresa")
-                else:
-                    st.write(f"N.º total: {len(funcionarios)} funcionário(s).")
-
-                    lid = []
-                    lnome = []
-                    locup = []
-                    lcpf = []
-                    lemail = []
-                    lcusto = []
-                    lcontr = []
-                    lsetor = []
-                    if st.session_state["conta_nome"] == "admin":
-                        for f in funcionarios:
-                            lid.append(f.get_id())
-                            lnome.append(f.get_nome())
-                            locup.append(f.get_ocup())
-                            lcpf.append(f.get_cpf())
-                            lemail.append(f.get_email()) 
-                            lcusto.append(f.get_custo())
-                            lcontr.append(dt.date.strftime(f.get_contr(), "%d/%m/%Y"))
-                            lsetor.append(s.get_nome())
-
-                        dic = {"id": lid, "nome" : lnome, "ocup": locup, "cpf": lcpf, "email": lemail, "custo": lcusto, "contr": lcontr, "setor": lsetor}
-                        graph = pd.DataFrame(dic)
-                        st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "ocup": "Ocupação", "cpf": "CPF", "email": "E-Mail", "custo": "Custo", "contr": "Contratação", "setor": "Setor"}, hide_index=True)
+                nome = st.text_input("Filtro de nome (opcional)")
+                ocup = st.text_input("Filtro de ocupação (opcional)")
+                if st.button("Listar"):
+                    for f in view.funcionario_busca(nome, ocup):
+                        if view.funcionario_listar_empresa(f.get_id()) == e.get_id():
+                            funcionarios.append(f)
+                    if funcionarios == []: st.write("Não há funcionários que atendam aos filtros na empresa")
                     else:
-                        for f in funcionarios:
-                            lid.append(f.get_id())
-                            lnome.append(f.get_nome())
-                            locup.append(f.get_ocup())
-                            lemail.append(f.get_email()) 
-                            lcontr.append(dt.date.strftime(f.get_contr(), "%d/%m/%Y"))
-                            lsetor.append(s.get_nome())
+                        st.write(f"N.º total: {len(funcionarios)} funcionário(s).")
 
-                        dic = {"id": lid, "nome" : lnome, "ocup": locup, "email": lemail, "contr": lcontr, "setor": lsetor}
-                        graph = pd.DataFrame(dic)
-                        st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "ocup": "Ocupação", "email": "E-Mail", "contr": "Contratação", "setor": "Setor"}, hide_index=True)
+                        lid = []
+                        lnome = []
+                        locup = []
+                        lcpf = []
+                        lemail = []
+                        lcusto = []
+                        lcontr = []
+                        lsetor = []
+                        if st.session_state["conta_nome"] == "admin":
+                            for f in funcionarios:
+                                lid.append(f.get_id())
+                                lnome.append(f.get_nome())
+                                locup.append(f.get_ocup())
+                                lcpf.append(f.get_cpf())
+                                lemail.append(f.get_email()) 
+                                lcusto.append(f.get_custo())
+                                lcontr.append(dt.date.strftime(f.get_contr(), "%d/%m/%Y"))
+                                lsetor.append(view.setor_listar_id(f.get_id_setor()).get_nome())
+
+                            dic = {"id": lid, "nome" : lnome, "ocup": locup, "cpf": lcpf, "email": lemail, "custo": lcusto, "contr": lcontr, "setor": lsetor}
+                            graph = pd.DataFrame(dic)
+                            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "ocup": "Ocupação", "cpf": "CPF", "email": "E-Mail", "custo": "Custo", "contr": "Contratação", "setor": "Setor"}, hide_index=True)
+                        else:
+                            for f in funcionarios:
+                                lid.append(f.get_id())
+                                lnome.append(f.get_nome())
+                                locup.append(f.get_ocup())
+                                lemail.append(f.get_email()) 
+                                lcontr.append(dt.date.strftime(f.get_contr(), "%d/%m/%Y"))
+                                lsetor.append(view.setor_listar_id(f.get_id_setor()).get_nome())
+
+                            dic = {"id": lid, "nome" : lnome, "ocup": locup, "email": lemail, "contr": lcontr, "setor": lsetor}
+                            graph = pd.DataFrame(dic)
+                            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "ocup": "Ocupação", "email": "E-Mail", "contr": "Contratação", "setor": "Setor"}, hide_index=True)
 
     def custos():
         pass
     
     def reajustes():
-        pass
+        if "empresa_id" not in st.session_state: st.write("Escolhe a empresa.")
+        else:
+            e = view.empresa_listar_id(st.session_state["empresa_id"])
+            if e == None:
+                st.subheader("Indisponível")
+                st.write("O administrador deve inserir-te no sistema da empresa.")
+            else:
+                st.subheader("Reajustes")
+                if st.session_state["conta_nome"] != "admin": st.write("Esta operação é exclusiva ao administrador.")
+                else:
+                    op = st.selectbox("Informa o tipo de reajuste", ["Setores da empresa", "Funcionários da empresa", "Funcionários dum setor"])
+                    if op == "Setores da empresa":
+                        if view.empresa_setores(e.get_id()) == []: st.write("Não há setores cadastrados na empresa")
+                        else:
+                            percentual = st.text_input("Informa o percentual do reajuste nos gastos dos setores (ex. ±XX.X)")
+                            if st.button("Reajustar"):
+                                try:
+                                    view.empresa_reajuste_gastos(e.get_id(), float(percentual))
+                                    st.success("Custos reajustados.")
+                                    time.sleep(2)
+                                    st.rerun()
+                                except Exception as erro:
+                                    st.error(erro)
+                    elif op == "Funcionários da empresa":
+                        if view.empresa_setores(e.get_id()) == []: st.write("Não há setores cadastrados na empresa")
+                        percentual = st.text_input("Informa o percentual do reajuste nos custos dos funcionarios (ex. ±XX.X)")
+                        if st.button("Reajustar"):
+                            try:
+                                view.empresa_reajuste_salarial(e.get_id(), float(percentual))
+                                st.success("Salários reajustados.")
+                                time.sleep(2)
+                                st.rerun()
+                            except Exception as erro:
+                                st.error(erro)
+                    elif op == "Funcionários dum setor":
+                        percentual = st.text_input("Informa o percentual do reajuste nos custos dos funcionarios (ex. ±XX.X)")
+                        setores = view.empresa_setores(e.get_id())
+                        if setores == []: st.write("Não há setores cadastrados")
+                        else:
+                            sr = st.selectbox("Setor escolhido", setores)
+                            if st.button("Reajustar"):
+                                try:
+                                    view.setor_reajuste_salarial(sr.get_id(), float(percentual))
+                                    if view.setor_funcionarios(sr.get_id()) == []: st.error("Não há funcionários no setor")
+                                    else:
+                                        st.success("Salários reajustados.")
+                                        time.sleep(2)
+                                        st.rerun()
+                                except Exception as erro:
+                                    st.error(erro)
 
     def realocamentos():
         pass

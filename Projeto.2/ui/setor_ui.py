@@ -54,7 +54,7 @@ class ManterSetorUI:
         nome = st.text_input("Informa o nome")
         desc = st.text_input("Informa a descrição")
         data = st.text_input("Informa a data de fundação (formato dd/mm/aaaa)")
-        custo_add = st.text_input("Informa um custo adicional (além dos funcionários)")
+        custo_add = st.text_input("Informa um custo mensal adicional (além dos funcionários)")
         if st.button("Inserir"):
             try:
                 view.setor_inserir(nome, desc, dt.datetime.strptime(data, "%d/%m/%Y").date(), float(custo_add))
@@ -71,10 +71,10 @@ class ManterSetorUI:
             st.write("Não há setor cadastrado.")
         else:
             s = st.selectbox("Setor a atualizar", setores)
-            nome = st.text_input("Informa o novo nome")
-            desc = st.text_input("Informa a nova descrição")
-            data = st.text_input("Informa a nova data de fundação (formato dd/mm/aaaa)")
-            custo_add = st.text_input("Informa o novo custo adicional (além dos funcionários)")
+            nome = st.text_input("Informa o novo nome", s.get_nome())
+            desc = st.text_input("Informa a nova descrição", s.get_desc())
+            data = st.text_input("Informa a nova data de fundação (formato dd/mm/aaaa)", dt.date.strftime(s.get_data(), "%d/%m/%Y"))
+            custo_add = st.text_input("Informa o novo custo mensal adicional (além dos funcionários)", s.get_custo_add())
             if st.button("Atualizar"):
                 try:
                     view.setor_atualizar(s.get_id(), nome, desc, dt.datetime.strptime(data, "%d/%m/%Y").date(), float(custo_add))
