@@ -76,8 +76,9 @@ def multi_funcionario_mover_setor(ocup: str, id_setor_inicial: int, id_setor_fin
     if ocup != "":
         fun = funcionario_busca("", ocup)
     ft = fun.copy()
-    for f in fun:
-        if f.get_id_setor() != id_setor_inicial: ft.remove(f)
+    if id_setor_inicial != 0:
+        for f in fun:
+            if f.get_id_setor() != id_setor_inicial: ft.remove(f)
     for f in ft:
         funcionario_mover_setor(id_setor_final, f.get_id())
 
@@ -105,7 +106,7 @@ def setor_excluir(id: int):
 def setor_funcionarios(id_setor: int):
     func = []
     for f in funcionario_listar():
-        if f.get_id_setor() == id_setor: func.append()
+        if f.get_id_setor() == id_setor: func.append(f)
     return func
 
 def setor_custo(id: int) -> float:
