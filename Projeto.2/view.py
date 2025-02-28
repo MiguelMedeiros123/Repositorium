@@ -102,6 +102,12 @@ def setor_excluir(id: int):
     s = Setor(id, "", "", "", "", "", "")
     Setores.excluir(s)
 
+def setor_funcionarios(id_setor: int):
+    func = []
+    for f in funcionario_listar():
+        if f.get_id_setor() == id_setor: func.append()
+    return func
+
 def setor_custo(id: int) -> float:
     c = setor_listar_id(id).get_custo_add()
     for f in funcionario_listar():
@@ -145,6 +151,12 @@ def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date, c
 def empresa_excluir(id: int):
     e = Empresa(id, "", "", "", "", "", "")
     Empresas.excluir(e)
+
+def empresa_setores(id_empresa: int):
+    setores = []
+    for s in setor_listar():
+        if s.get_id_empresa() == id_empresa: setores.append(s)
+    return setores
 
 def empresa_reajuste_gastos(id_empresa: int, percentual: float):
     for s in setor_listar():
