@@ -131,7 +131,7 @@ class VerEmpresaUI:
                 st.subheader("Indisponível")
                 st.write("O administrador deve inserir-te no sistema da empresa.")
             else:
-                st.subheader("Setores da empresa")
+                st.subheader("Custo por setor")
                 setores = view.empresa_setores(e.get_id())
                 if setores == []: st.write("Não há setor cadastrado na empresa.")
                 else:
@@ -140,8 +140,8 @@ class VerEmpresaUI:
                     for s in setores:
                         lcusto.append(view.setor_custo(s.get_id()))
                         lnome.append(s.get_nome())
-                    graph = pd.DataFrame(lcusto, columns=lnome) 
-                    st.bar_chart(graph) 
+                    graph = pd.DataFrame({"Custo mensal": lcusto, "Setores": lnome}) 
+                    st.bar_chart(graph, x="Setores", y="Custo mensal", horizontal=True)
     
     def reajustes():
         if "empresa_id" not in st.session_state: st.write("Escolhe a empresa.")
