@@ -1,0 +1,1 @@
+[{"id": 1, "nome": "Gilbertsen's Co.", "desc": "Empresa dos Gilbertsen", "dono": "Gilbert Gilbertsen", "fund": "10/10/1910", "setores": 1, "custo_add": 1000.0}, {"id": 2, "nome": "Teste", "desc": "Teste", "dono": "Teste", "fund": "10/10/1910", "setores": 0, "custo_add": 10000.0}]

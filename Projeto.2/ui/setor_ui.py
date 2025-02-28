@@ -10,14 +10,14 @@ class ManterSetorUI:
         st.header("Cadastro de setores")
         listar, inserir, atualizar, excluir, func = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir", "Mover funcionário"])
 
-        with listar: ManterSetorUI.Listar()
-        with inserir: ManterSetorUI.Inserir()
-        with atualizar: ManterSetorUI.Atualizar()
-        with excluir: ManterSetorUI.Excluir()
-        with func: ManterSetorUI.Funcionario()
+        with listar: ManterSetorUI.listar()
+        with inserir: ManterSetorUI.inserir()
+        with atualizar: ManterSetorUI.atualizar()
+        with excluir: ManterSetorUI.excluir()
+        with func: ManterSetorUI.mover_func()
     
     @staticmethod
-    def Listar():
+    def listar():
         setores = view.setor_listar()
         if setores == []:
             st.write("Não há setor cadastrado.")
@@ -35,7 +35,7 @@ class ManterSetorUI:
                 ldesc.append(s.get_desc())
                 ldata.append(dt.date.strftime(s.get_data(), "%d/%m/%Y"))
                 lfuncionarios.append(s.get_funcionarios())
-                lcusto.append("FAZER!!!")
+                lcusto.append(s.get_custo_add())
 
                 be = False
                 for e in view.empresa_listar():
@@ -47,16 +47,17 @@ class ManterSetorUI:
 
             dic = {"id": lid, "nome" : lnome, "desc": ldesc, "data": ldata, "funcionarios": lfuncionarios, "custo": lcusto, "empresa": lempresa}
             graph = pd.DataFrame(dic)
-            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "desc": "Descrição", "data": "Fundação", "funcionarios": "Nº de funcionários", "custo" : "Custo", "empresa": "Empresa"}, hide_index=True)
+            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "desc": "Descrição", "data": "Fundação", "funcionarios": "Nº de funcionários", "custo" : "Custo adicional", "empresa": "Empresa"}, hide_index=True)
 
     @staticmethod
-    def Inserir():
+    def inserir():
         nome = st.text_input("Informa o nome")
         desc = st.text_input("Informa a descrição")
         data = st.text_input("Informa a data de fundação (formato dd/mm/aaaa)")
+        custo_add = st.text_input("Informa um custo adicional (além dos funcionários)")
         if st.button("Inserir"):
             try:
-                view.setor_inserir(nome, desc, dt.datetime.strptime(data, "%d/%m/%Y").date())
+                view.setor_inserir(nome, desc, dt.datetime.strptime(data, "%d/%m/%Y").date(), float(custo_add))
                 st.success("Setor inserido com sucesso.")
                 time.sleep(2)
                 st.rerun()
@@ -64,7 +65,7 @@ class ManterSetorUI:
                 st.error(erro)
 
     @staticmethod
-    def Atualizar():
+    def atualizar():
         setores = view.setor_listar()
         if setores == []:
             st.write("Não há setor cadastrado.")
@@ -73,9 +74,10 @@ class ManterSetorUI:
             nome = st.text_input("Informa o novo nome")
             desc = st.text_input("Informa a nova descrição")
             data = st.text_input("Informa a nova data de fundação (formato dd/mm/aaaa)")
+            custo_add = st.text_input("Informa o novo custo adicional (além dos funcionários)")
             if st.button("Atualizar"):
                 try:
-                    view.setor_atualizar(s.get_id(), nome, desc, dt.datetime.strptime(data, "%d/%m/%Y").date())
+                    view.setor_atualizar(s.get_id(), nome, desc, dt.datetime.strptime(data, "%d/%m/%Y").date(), float(custo_add))
                     st.success("Setor atualizado com sucesso.")
                     time.sleep(2)
                     st.rerun()
@@ -83,7 +85,7 @@ class ManterSetorUI:
                     st.error(erro)
 
     @staticmethod
-    def Excluir():
+    def excluir():
         setores = view.setor_listar()
         if setores == []:
             st.write("Não há setor cadastrado.")
@@ -99,7 +101,7 @@ class ManterSetorUI:
                     st.error(erro)
 
     @staticmethod
-    def Funcionario():
+    def mover_func():
         setores = view.setor_listar()
         funcionarios = view.funcionario_listar()
         if setores == []:

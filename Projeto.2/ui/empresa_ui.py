@@ -7,17 +7,17 @@ import time
 class ManterEmpresaUI:
     @staticmethod
     def main():
-        st.header("Cadastro de funcionários")
+        st.header("Cadastro de empresas")
         listar, inserir, atualizar, excluir, setor = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir", "Mover setor"])
 
-        with listar: ManterEmpresaUI.Listar()
-        with inserir: ManterEmpresaUI.Inserir()
-        with atualizar: ManterEmpresaUI.Atualizar()
-        with excluir: ManterEmpresaUI.Excluir()
-        with setor: ManterEmpresaUI.Setor()
+        with listar: ManterEmpresaUI.listar()
+        with inserir: ManterEmpresaUI.inserir()
+        with atualizar: ManterEmpresaUI.atualizar()
+        with excluir: ManterEmpresaUI.excluir()
+        with setor: ManterEmpresaUI.mover_setor()
     
     @staticmethod
-    def Listar():
+    def listar():
         empresas = view.empresa_listar()
         if empresas == []:
             st.write("Não há empresa cadastrada.")
@@ -37,21 +37,22 @@ class ManterEmpresaUI:
                 ldono.append(e.get_dono())
                 lfund.append(dt.date.strftime(e.get_fund(), "%d/%m/%Y"))
                 lsetores.append(e.get_setores())
-                lcusto.append("FAZER!!!")
+                lcusto.append(e.get_custo_add())
 
             dic = {"id": lid, "nome" : lnome, "desc": ldesc, "dono": ldono, "fund": lfund, "setores": lsetores, "custo": lcusto}
             graph = pd.DataFrame(dic)
-            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "desc": "Descição", "dono": "Dono", "fund": "Fundação", "setores": "Nº de setores", "custo": "Custo"}, hide_index=True)
+            st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "desc": "Descição", "dono": "Dono", "fund": "Fundação", "setores": "Nº de setores", "custo": "Custo adicional"}, hide_index=True)
 
     @staticmethod
-    def Inserir():
+    def inserir():
         nome = st.text_input("Informa o nome")
         desc = st.text_input("Informa a descrição")
         dono = st.text_input("Informa o dono")
         fund = st.text_input("Informa a data de fundação (formato dd/mm/aaaa)")
+        custo_add = st.text_input("Informa um custo adicional (além dos setores e funcionários)")
         if st.button("Inserir"):
             try:
-                view.empresa_inserir(nome, desc, dono, dt.datetime.strptime(fund, "%d/%m/%Y").date())
+                view.empresa_inserir(nome, desc, dono, dt.datetime.strptime(fund, "%d/%m/%Y").date(), float(custo_add))
                 st.success("Empresa inserida com sucesso.")
                 time.sleep(2)
                 st.rerun()
@@ -59,19 +60,20 @@ class ManterEmpresaUI:
                 st.error(erro)
 
     @staticmethod
-    def Atualizar():
+    def atualizar():
         empresas = view.empresa_listar()
         if empresas == []:
             st.write("Não há empresa cadastrada.")
         else:
             e = st.selectbox("Empresa a atualizar", empresas)
-            nome = st.text_input("Informa o novo nome")
-            desc = st.text_input("Informa a nova descrição")
-            dono = st.text_input("Informa o novo dono")
-            fund = st.text_input("Informa a nova data de fundação (formato dd/mm/aaaa)")
+            nome = st.text_input("Informa o novo nome", e.get_nome())
+            desc = st.text_input("Informa a nova descrição", e.get_desc())
+            dono = st.text_input("Informa o novo dono", e.get_dono())
+            fund = st.text_input("Informa a nova data de fundação (formato dd/mm/aaaa)", dt.date.strftime(e.get_fund(), "%d/%m/%Y"))
+            custo_add = st.text_input("Informa o novo custo adicional (além dos setores e funcionários)", e.get_custo_add())
             if st.button("Atualizar"):
                 try:
-                    view.empresa_atualizar(e.get_id(), nome, desc, dono, dt.datetime.strptime(fund, "%d/%m/%Y").date())
+                    view.empresa_atualizar(e.get_id(), nome, desc, dono, dt.datetime.strptime(fund, "%d/%m/%Y").date(), float(custo_add))
                     st.success("Empresa atualizada com sucesso.")
                     time.sleep(2)
                     st.rerun()
@@ -79,7 +81,7 @@ class ManterEmpresaUI:
                     st.error(erro)
 
     @staticmethod
-    def Excluir():
+    def excluir():
         empresas = view.empresa_listar()
         if empresas == []:
             st.write("Não há empresa cadastrado.")
@@ -95,7 +97,7 @@ class ManterEmpresaUI:
                     st.error(erro)
 
     @staticmethod
-    def Setor():
+    def mover_setor():
         empresas = view.empresa_listar()
         setores = view.setor_listar()
         if empresas == []:

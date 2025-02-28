@@ -12,4 +12,5 @@ class LoginUI:
             else:
                 st.session_state["conta_id"] = a["id"]
                 st.session_state["conta_nome"] = a["nome"]
+                if a["nome"] != "admin": st.session_state["empresa_id"] = view.funcionario_listar_empresa(a["id"])
                 st.rerun()

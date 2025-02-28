@@ -10,13 +10,13 @@ class ManterFuncionarioUI:
         st.header("Cadastro de funcionários")
         listar, inserir, atualizar, excluir = st.tabs(["Listar", "Inserir", "Atualizar", "Excluir"])
 
-        with listar: ManterFuncionarioUI.Listar()
-        with inserir: ManterFuncionarioUI.Inserir()
-        with atualizar: ManterFuncionarioUI.Atualizar()
-        with excluir: ManterFuncionarioUI.Excluir()
+        with listar: ManterFuncionarioUI.listar()
+        with inserir: ManterFuncionarioUI.inserir()
+        with atualizar: ManterFuncionarioUI.atualizar()
+        with excluir: ManterFuncionarioUI.excluir()
     
     @staticmethod
-    def Listar():
+    def listar():
         funcionarios = view.funcionario_listar()
         if funcionarios == []:
             st.write("Não há funcionário cadastrado.")
@@ -51,7 +51,7 @@ class ManterFuncionarioUI:
             st.dataframe(graph, column_config = {"id": "ID", "nome": "Nome", "ocup": "Ocupação", "cpf": "CPF", "email": "E-Mail", "custo": "Custo", "contr": "Contratação", "setor": "Setor"}, hide_index=True)
 
     @staticmethod
-    def Inserir():
+    def inserir():
         nome = st.text_input("Informa o nome")
         ocup = st.text_input("Informa a ocupação")
         cpf = st.text_input("Informa o CPF")
@@ -74,7 +74,7 @@ class ManterFuncionarioUI:
                 st.error(erro)
 
     @staticmethod
-    def Atualizar():
+    def atualizar():
         funcionarios = view.funcionario_listar()
         if funcionarios == []:
             st.write("Não há funcionário cadastrado.")
@@ -102,7 +102,7 @@ class ManterFuncionarioUI:
                     st.error(erro)
 
     @staticmethod
-    def Excluir():
+    def excluir():
         funcionarios = view.funcionario_listar()
         if funcionarios == []:
             st.write("Não há funcionário cadastrado.")

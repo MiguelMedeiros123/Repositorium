@@ -111,16 +111,16 @@ class Setores(CRUD):
             f = Funcionarios.listar_id(id_func)
             if f != None:
                 si = cls.listar_id(f.get_id_setor())
-                if si.get_id() != sf.get_id():
-                    if si != None:
+                if si != None:
+                    if si.get_id() != sf.get_id():
                         si.set_funcionarios(si.get_funcionarios()-1)
                         cls.atualizar(si)
-                    sf.set_funcionarios(sf.get_funcionarios()+1)
-                    f.set_id_setor(id_setor)
-                    cls.atualizar(sf)
-                    Funcionarios.atualizar(f)
-                else:
-                    raise Exception("Funcionário não pode ser movido ao setor em que já está.")
+                    else:
+                        raise Exception("Funcionário não pode ser movido ao setor em que já está.")
+                sf.set_funcionarios(sf.get_funcionarios()+1)
+                f.set_id_setor(id_setor)
+                cls.atualizar(sf)
+                Funcionarios.atualizar(f)
 
     @classmethod
     def abrir(cls):
