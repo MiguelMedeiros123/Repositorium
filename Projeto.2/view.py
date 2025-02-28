@@ -19,6 +19,8 @@ def autenticar(email: str, senha: str) -> dict:
 
 
 def funcionario_inserir(nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date):
+    for func in funcionario_listar():
+        if func.get_email() == email: raise Exception("E-mail inválido.")
     f = Funcionario(0, nome, senha, ocup, cpf, email, custo, contr, 0)
     Funcionarios.inserir(f)
 
@@ -34,6 +36,8 @@ def funcionario_atualizar(id: int, nome: str, senha: str, ocup: str, cpf: str, e
     Funcionarios.atualizar(fn)
 
 def funcionario_excluir(id: int):
+    f = funcionario_listar_id(id)
+    if f.get_id_setor() != 0: raise Exception("Funcionário informado está num setor, impossibilitando sua exclusão.")
     f = Funcionario(id, "", "", "", "", "", "", "", "")
     Funcionarios.excluir(f)
 
@@ -80,8 +84,10 @@ def multi_funcionario_mover_setor(ocup: str, id_setor_inicial: int, id_setor_fin
     if id_setor_inicial != 0:
         for f in fun:
             if f.get_id_setor() != id_setor_inicial: ft.remove(f)
-    for f in ft:
-        funcionario_mover_setor(id_setor_final, f.get_id())
+    if ft == []: raise Exception("Não há funcionário que atenda aos filtros.")
+    else:
+        for f in ft:
+            funcionario_mover_setor(id_setor_final, f.get_id())
 
 
 
@@ -101,6 +107,7 @@ def setor_atualizar(id: int, nome: str, desc: str, data: dt.date, custo_add: flo
     Setores.atualizar(sn)
 
 def setor_excluir(id: int):
+    if setor_funcionarios(id) == []: raise Exception("Setor informado possui funcionários, remova-os para excluí-lo.")
     s = Setor(id, "", "", "", "", "", "")
     Setores.excluir(s)
 
@@ -150,8 +157,10 @@ def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date, c
     Empresas.atualizar(en)
 
 def empresa_excluir(id: int):
-    e = Empresa(id, "", "", "", "", "", "")
-    Empresas.excluir(e)
+    if empresa_setores(id) == []:
+        e = Empresa(id, "", "", "", "", "", "")
+        Empresas.excluir(e)
+    else: raise Exception("Empresa informada possui setores, remova-os para excluí-la.")
 
 def empresa_setores(id_empresa: int):
     setores = []

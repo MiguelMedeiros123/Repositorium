@@ -215,13 +215,19 @@ class VerEmpresaUI:
                         except Exception as erro:
                             st.error(erro)
             elif op == "Funcionários para setor":
-                seto = view.setor_listar()
+                seto = ["Nenhum"]
+                for s in view.setor_listar():
+                    seto.append(s)
                 si = st.selectbox("Informa o setor do qual sairão os funcionários", seto)
                 sf = st.selectbox("Informa a setor ao qual irão os funcionários", seto)
-                ocup = st.text_input("Filtro de ocupação (opcional)")
+                ocup = st.text_input("Informa o filtro de ocupação (opcional)")
                 if st.button("Realocar funcionários"):
                     try:
-                        view.multi_funcionario_mover_setor(ocup, si.get_id(), sf.get_id())
+                        if si != "Nenhum" and sf != "Nenhum":
+                            view.multi_funcionario_mover_setor(ocup, si.get_id(), sf.get_id())
+                        elif si == "Nenhum":
+                            view.multi_funcionario_mover_setor(ocup, 0, sf.get_id())
+                        elif sf == "Nenhum"
                         st.success("Funcionários movidos.")
                         time.sleep(2)
                         st.rerun()
