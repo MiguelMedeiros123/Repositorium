@@ -66,23 +66,19 @@ class Empresas(CRUD):
         s = Setores.listar_id(id_setor)
         if s != None:
             ei = cls.listar_id(s.get_id_empresa())
-            if ei != None:
-                if ei.get_id() != ef.get_id():
+            if ei != ef:
+                if ei != None:
                     ei.set_setores(ei.get_setores()-1)
                     cls.atualizar(ei)
-                    if ef != None:
-                        ef.set_setores(ef.get_setores()+1)
-                        s.set_id_empresa(id_empresa)
-                        cls.atualizar(ef)
-                    else: s.set_id_empresa(0)
-                    Setores.atualizar(s)
-                else: raise Exception("Setor não pode ser movido à empresa em que já está.")
-            else:
-                ef.set_setores(ef.get_setores()+1)
-                s.set_id_empresa(id_empresa)
-                cls.atualizar(ef)
+                if ef != None:
+                    ef.set_setores(ef.get_setores()+1)
+                    s.set_id_empresa(id_empresa)
+                    cls.atualizar(ef)
+                else: s.set_id_empresa(0)
                 Setores.atualizar(s)
+            else: raise Exception("Setor não pode ser movido à empresa em que já está.")
         else: raise Exception("Setor informado não existe.")
+
     
     @classmethod
     def abrir(cls):
@@ -111,19 +107,20 @@ class Setores(CRUD):
         if f != None:
             if f.get_nome() != "admin":
                 si = cls.listar_id(f.get_id_setor())
-                if si != None:
-                    if si.get_id() != sf.get_id():
+                if si != sf:
+                    if si != None:
                         si.set_funcionarios(si.get_funcionarios()-1)
                         cls.atualizar(si)
-                    else: raise Exception("Funcionário não pode ser movido ao setor em que já está.")
-                if sf != None:
-                    sf.set_funcionarios(sf.get_funcionarios()+1)
-                    f.set_id_setor(id_setor)
-                else: f.set_id_setor(0)
-                cls.atualizar(sf)
-                Funcionarios.atualizar(f)
+                    if sf != None:
+                        sf.set_funcionarios(sf.get_funcionarios()+1)
+                        f.set_id_setor(id_setor)
+                        cls.atualizar(sf)
+                    else: f.set_id_setor(0)
+                    Funcionarios.atualizar(f)
+                else: raise Exception("Funcionário não pode ser movido ao setor em que já está.")
             else: raise Exception("Não se pode mover o admin.")
-        else: raise Exception("Funcionário não existe")
+        else: raise Exception("Funcionário informado não existe")
+        
 
 
     @classmethod

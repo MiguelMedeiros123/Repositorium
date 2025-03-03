@@ -97,7 +97,7 @@ class ManterEmpresaUI:
                     st.error(erro)
 
     @staticmethod
-    def mover_setor():
+    def mover_setor()
         empresas = view.empresa_listar()
         setores = view.setor_listar()
         if empresas == []:

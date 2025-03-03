@@ -200,34 +200,34 @@ class VerEmpresaUI:
         if st.session_state["conta_nome"] != "admin": st.write("Esta operação é exclusiva ao administrador.")
         else:
             op = st.selectbox("Informa o tipo de realocamento", ["Setores para empresa", "Funcionários para setor"])
-            if op == "Setores para empresa":
-                emp = view.empresa_listar()
+            if op == "Setores para empresa":  
+                emp = ["Nenhuma"]
+                for e in view.empresa_listar(): emp.append(e)
                 ei = st.selectbox("Informa a empresa da qual sairão os setores", emp)
                 ef = st.selectbox("Informa a empresa para à qual irão os setores", emp)
                 if st.button("Realocar setores"):
-                    if ei == ef: st.error("Não se pode repetir a empresa")
-                    else:
-                        try:
-                            view.multi_setor_mover_empresa(ei.get_id(), ef.get_id())
-                            st.success("Setores movidos")
-                            time.sleep(2)
-                            st.rerun()
-                        except Exception as erro:
-                            st.error(erro)
+                    try:
+                        if ei != "Nenhuma" and ef != "Nenhuma": view.multi_setor_mover_empresa(ei.get_id(), ef.get_id())
+                        elif ei == "Nenhuma" and ef != "Nenhuma": view.multi_setor_mover_empresa(0, ef.get_id())
+                        elif ei != "Nenhuma" and ef == "Nenhuma": view.multi_setor_mover_empresa(ei.get_id(), 0)
+                        else: raise Exception("Não se pode mover setores de empresa nenhuma para nenhuma empresa")
+                        st.success("Setores movidos")
+                        time.sleep(2)
+                        st.rerun()
+                    except Exception as erro:
+                        st.error(erro)
             elif op == "Funcionários para setor":
                 seto = ["Nenhum"]
-                for s in view.setor_listar():
-                    seto.append(s)
+                for s in view.setor_listar(): seto.append(s)
                 si = st.selectbox("Informa o setor do qual sairão os funcionários", seto)
                 sf = st.selectbox("Informa a setor ao qual irão os funcionários", seto)
                 ocup = st.text_input("Informa o filtro de ocupação (opcional)")
                 if st.button("Realocar funcionários"):
                     try:
-                        if si != "Nenhum" and sf != "Nenhum":
-                            view.multi_funcionario_mover_setor(ocup, si.get_id(), sf.get_id())
-                        elif si == "Nenhum":
-                            view.multi_funcionario_mover_setor(ocup, 0, sf.get_id())
-                        elif sf == "Nenhum"
+                        if si != "Nenhum" and sf != "Nenhum": view.multi_funcionario_mover_setor(ocup, si.get_id(), sf.get_id())
+                        elif si == "Nenhum" and sf != "Nenhum": view.multi_funcionario_mover_setor(ocup, 0, sf.get_id())
+                        elif si != "Nenhum" and sf == "Nenhum": view.multi_funcionario_mover_setor(ocup, si.get_id(), 0)
+                        else: raise Exception("Não se pode mover funcionários de setor nenhum para nenhum setor.")
                         st.success("Funcionários movidos.")
                         time.sleep(2)
                         st.rerun()

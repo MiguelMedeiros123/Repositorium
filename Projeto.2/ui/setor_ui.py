@@ -101,7 +101,7 @@ class ManterSetorUI:
                     st.error(erro)
 
     @staticmethod
-    def mover_func():
+    def mover_func()
         setores = view.setor_listar()
         funcionarios = view.funcionario_listar()
         if setores == []:
