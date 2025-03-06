@@ -97,10 +97,11 @@ class ManterEmpresaUI:
                     st.error(erro)
 
     @staticmethod
-    def mover_setor()
-        empresas = view.empresa_listar()
+    def mover_setor():
+        empresas = ["Nenhuma"]
+        for em in view.empresa_listar(): empresas.append(em)
         setores = view.setor_listar()
-        if empresas == []:
+        if empresas == ["Nenhuma"]:
             st.write("Não há empresa cadastrada.")
         else:
             if setores == []:
@@ -110,8 +111,12 @@ class ManterEmpresaUI:
                 e = st.selectbox("Empresa a mover", empresas)
                 if st.button("Mover"):
                     try:
-                        view.setor_mover_empresa(e.get_id(), s.get_id())
-                        st.success("Setor movido à empresa.")
+                        if e != "Nenhuma":
+                            view.setor_mover_empresa(e.get_id(), s.get_id())
+                            st.success("Setor movido à empresa.")
+                        else:
+                            view.setor_mover_empresa(0, s.get_id())
+                            st.success("Setor removido de setores.")
                         time.sleep(2)
                         st.rerun()
                     except Exception as erro:

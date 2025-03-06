@@ -168,7 +168,7 @@ class VerEmpresaUI:
                                 except Exception as erro:
                                     st.error(erro)
                     elif op == "Funcionários da empresa":
-                        if view.empresa_setores(e.get_id()) == []: st.write("Não há setores cadastrados na empresa")
+                        if view.empresa_funcionarios(e.get_id()) == []: st.write("Não há funcionários cadastrados na empresa")
                         else:
                             percentual = st.text_input("Informa o percentual do reajuste nos custos dos funcionarios (ex. ±XX.X)")
                             if st.button("Reajustar custo"):
@@ -180,10 +180,10 @@ class VerEmpresaUI:
                                 except Exception as erro:
                                     st.error(erro)
                     elif op == "Funcionários dum setor":
-                        percentual = st.text_input("Informa o percentual do reajuste nos custos dos funcionarios (ex. ±XX.X)")
                         setores = view.empresa_setores(e.get_id())
                         if setores == []: st.write("Não há setores cadastrados")
                         else:
+                            percentual = st.text_input("Informa o percentual do reajuste nos custos dos funcionarios (ex. ±XX.X)")
                             sr = st.selectbox("Setor escolhido", setores)
                             if st.button("Reajustar"):
                                 try:

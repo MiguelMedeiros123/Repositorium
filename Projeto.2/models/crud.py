@@ -61,7 +61,7 @@ class CRUD(ABC):
 
 class Empresas(CRUD):
     @classmethod
-    def mover_setor(cls, id_empresa: int, id_setor: int):
+    def mover_setor(cls, id_empresa: int, id_setor: int)
         ef = cls.listar_id(id_empresa)
         s = Setores.listar_id(id_setor)
         if s != None:
@@ -101,7 +101,7 @@ class Empresas(CRUD):
 
 class Setores(CRUD):
     @classmethod
-    def mover_func(cls, id_setor: int, id_func: int):
+    def mover_func(cls, id_setor: int, id_func: int)
         sf = cls.listar_id(id_setor)
         f = Funcionarios.listar_id(id_func)
         if f != None:

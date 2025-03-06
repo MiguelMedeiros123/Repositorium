@@ -107,7 +107,7 @@ def setor_atualizar(id: int, nome: str, desc: str, data: dt.date, custo_add: flo
     Setores.atualizar(sn)
 
 def setor_excluir(id: int):
-    if setor_funcionarios(id) == []: raise Exception("Setor informado possui funcionários, remova-os para excluí-lo.")
+    if setor_funcionarios(id) != []: raise Exception("Setor informado possui funcionários, remove-os para excluí-lo.")
     s = Setor(id, "", "", "", "", "", "")
     Setores.excluir(s)
 
@@ -157,16 +157,22 @@ def empresa_atualizar(id: int, nome: str, desc: str, dono: str, fund: dt.date, c
     Empresas.atualizar(en)
 
 def empresa_excluir(id: int):
-    if empresa_setores(id) == []:
-        e = Empresa(id, "", "", "", "", "", "")
-        Empresas.excluir(e)
-    else: raise Exception("Empresa informada possui setores, remova-os para excluí-la.")
+    if empresa_setores(id) != []: raise Exception("Empresa informada possui setores, remove-os para excluí-la.")
+    e = Empresa(id, "", "", "", "", "", "")
+    Empresas.excluir(e)
 
 def empresa_setores(id_empresa: int):
     setores = []
     for s in setor_listar():
         if s.get_id_empresa() == id_empresa: setores.append(s)
     return setores
+
+def empresa_funcionarios(id_empresa: int):
+    func = []
+    for s in empresa_setores(id_empresa):
+        for f in setor_funcionarios(s.get_id()):
+            func.append(f)
+    return func
 
 def empresa_reajuste_gastos(id_empresa: int, percentual: float):
     for s in setor_listar():

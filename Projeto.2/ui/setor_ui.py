@@ -101,10 +101,11 @@ class ManterSetorUI:
                     st.error(erro)
 
     @staticmethod
-    def mover_func()
-        setores = view.setor_listar()
+    def mover_func():
+        setores = ["Nenhum"]
+        for se in view.setor_listar(): setores.append(se)
         funcionarios = view.funcionario_listar()
-        if setores == []:
+        if setores == ["Nenhum"]:
             st.write("Não há setor cadastrado.")
         else:
             if funcionarios == []:
@@ -114,8 +115,12 @@ class ManterSetorUI:
                 s = st.selectbox("Setor a mover", setores)
                 if st.button("Mover"):
                     try:
-                        view.funcionario_mover_setor(s.get_id(), f.get_id())
-                        st.success("Funcionário movido ao setor.")
+                        if s != "Nenhum":
+                            view.funcionario_mover_setor(s.get_id(), f.get_id())
+                            st.success("Funcionário movido ao setor.")
+                        else:
+                            view.funcionario_mover_setor(0, f.get_id())
+                            st.success("Funcionário removido de setores.")
                         time.sleep(2)
                         st.rerun()
                     except Exception as erro:
