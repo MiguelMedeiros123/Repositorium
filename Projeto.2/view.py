@@ -32,6 +32,8 @@ def funcionario_listar_id(id: int) -> Funcionario:
 
 def funcionario_atualizar(id: int, nome: str, senha: str, ocup: str, cpf: str, email: str, custo: float, contr: dt.date):
     fv = funcionario_listar_id(id)
+    for func in funcionario_listar():
+        if func.get_email() == email and func.get_id() != id: raise Exception("E-mail inválido.")
     fn = Funcionario(id, nome, senha, ocup, cpf, email, custo, contr, fv.get_id_setor())
     Funcionarios.atualizar(fn)
 

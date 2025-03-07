@@ -61,23 +61,33 @@ class CRUD(ABC):
 
 class Empresas(CRUD):
     @classmethod
-    def mover_setor(cls, id_empresa: int, id_setor: int)
+    def mover_setor(cls, id_empresa: int, id_setor: int):
         ef = cls.listar_id(id_empresa)
         s = Setores.listar_id(id_setor)
         if s != None:
             ei = cls.listar_id(s.get_id_empresa())
-            if ei != ef:
-                if ei != None:
-                    ei.set_setores(ei.get_setores()-1)
-                    cls.atualizar(ei)
+            if ei == None:
                 if ef != None:
                     ef.set_setores(ef.get_setores()+1)
-                    s.set_id_empresa(id_empresa)
+                    s.set_id_empresa(ef.get_id())
                     cls.atualizar(ef)
-                else: s.set_id_empresa(0)
-                Setores.atualizar(s)
-            else: raise Exception("Setor não pode ser movido à empresa em que já está.")
-        else: raise Exception("Setor informado não existe.")
+                    Setores.atualizar(s)
+                else: raise Exception("Setor não pode ser movido de empresa nenhuma a empresa nenhuma.")
+            else:
+                if ef == None:
+                    ei.set_setores(ei.get_setores()-1)
+                    s.set_id_empresa(0)
+                    cls.atualizar(ei)
+                    Setores.atualizar(s)
+                else:
+                    if ei.get_id() != ef.get_id():
+                        ei.set_setores(ei.get_setores()-1)
+                        s.set_id_empresa(ef.get_id())
+                        ef.set_setores(ef.get_setores()+1)
+                        cls.atualizar(ei)
+                        Setores.atualizar(s)
+                        cls.atualizar(ef)
+                    else: raise Exception("Não se pode mover o funcionário ao setor em que já está.")
 
     
     @classmethod
@@ -101,26 +111,35 @@ class Empresas(CRUD):
 
 class Setores(CRUD):
     @classmethod
-    def mover_func(cls, id_setor: int, id_func: int)
+    def mover_func(cls, id_setor: int, id_func: int):
         sf = cls.listar_id(id_setor)
         f = Funcionarios.listar_id(id_func)
         if f != None:
             if f.get_nome() != "admin":
                 si = cls.listar_id(f.get_id_setor())
-                if si != sf:
-                    if si != None:
-                        si.set_funcionarios(si.get_funcionarios()-1)
-                        cls.atualizar(si)
+                if si == None:
                     if sf != None:
                         sf.set_funcionarios(sf.get_funcionarios()+1)
-                        f.set_id_setor(id_setor)
+                        f.set_id_setor(sf.get_id())
                         cls.atualizar(sf)
-                    else: f.set_id_setor(0)
-                    Funcionarios.atualizar(f)
-                else: raise Exception("Funcionário não pode ser movido ao setor em que já está.")
-            else: raise Exception("Não se pode mover o admin.")
-        else: raise Exception("Funcionário informado não existe")
-        
+                        Funcionarios.atualizar(f)
+                    else: raise Exception("Funcionário não pode ser movido de setor nenhum a setor nenhum.")
+                else:
+                    if sf == None:
+                        si.set_funcionarios(si.get_funcionarios()-1)
+                        f.set_id_setor(0)
+                        cls.atualizar(si)
+                        Funcionarios.atualizar(f)
+                    else:
+                        if si.get_id() != sf.get_id():
+                            si.set_funcionarios(si.get_funcionarios()-1)
+                            f.set_id_setor(sf.get_id())
+                            sf.set_funcionarios(sf.get_funcionarios()+1)
+                            cls.atualizar(si)
+                            Funcionarios.atualizar(f)
+                            cls.atualizar(sf)
+                        else: raise Exception("Não se pode mover o funcionário ao setor em que já está.")
+            else: raise Exception("Não se pode mover o admin.")   
 
 
     @classmethod
